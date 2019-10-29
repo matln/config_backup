@@ -31,7 +31,7 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 " Enable folding
-set foldmethod=indent
+set foldmethod=marker
 set foldlevel=99
 
 " Enable folding with the spacebar
@@ -80,7 +80,7 @@ map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "let g:syntastic_check_on_open = 1
 "let g:syntastic_check_on_wq = 0
 
-
+"需要先在系统安装flake8
 Plugin 'nvie/vim-flake8'
 "autocmd FileType python map <buffer> <F2> :call Flake8()<CR>
 
@@ -128,6 +128,8 @@ let g:NERDTreeShowLineNumbers=1
 "let g:NERDTreeSize=25
 
 " 使用winmanager在左上和左下合并显示nerdtree和tagbar
+" 需要先安装ctags：sudo apt-get install exuberant-ctags
+" 或从源码安装
 Plugin 'majutsushi/tagbar'
 Plugin 'vim-scripts/winmanager'
 let g:winManagerWindowLayout='NERDTree|Tagbar'
@@ -141,6 +143,8 @@ let g:AutoOpenWinManager = 1 "这里要配合修改winmanager.vim文件，见下
 
 "按F4同时打开或关闭nerdtree，tagbar
 nmap <silent> <F4> :NERDTreeToggle<CR>:TagbarToggle<CR>
+"切换窗口到nerdtree
+nnoremap <silent> <tab> H<C-W><C-H>
 
 let g:NERDTree_title = "[NERDTree]"
 function! NERDTree_Start()
