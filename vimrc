@@ -1,31 +1,26 @@
 set nocompatible              " required
 filetype off                  " required
-"set mouse=a
-set hlsearch
-set nu
-":noh     "cancel highlight
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" alternatively, pass a path where Vundle should install plugins "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
 
+Plugin 'VundleVim/Vundle.vim'
 " add all your plugins here (note older versions of Vundle
 " used Bundle instead of Plugin)
 
-" ...
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+"set mouse=a
+set hlsearch
+set nu!
+":noh     "cancel highlight
+set backspace=indent,eol,start
 
 "split navigations
-nnoremap <C-J> <C-W><C-J> 
+nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
@@ -33,9 +28,6 @@ nnoremap <C-H> <C-W><C-H>
 " Enable folding
 set foldmethod=marker
 set foldlevel=99
-
-" Enable folding with the spacebar
-""nnoremap <space> za
 
 Plugin 'tmhedberg/SimpylFold'
 
@@ -69,36 +61,24 @@ Bundle 'Valloric/YouCompleteMe'
 let g:ycm_autoclose_preview_window_after_completion=1
 let mapleader = ","
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"vim自动补齐Anaconda虚拟环境envs下的site-package
+let g:ycm_python_binary_path = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
 
-"Plugin 'scrooloose/syntastic'
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-
-"需要先在系统安装flake8
+"需要先在系统安装flake8, 通过pip
 Plugin 'nvie/vim-flake8'
 "autocmd FileType python map <buffer> <F2> :call Flake8()<CR>
 
 let python_highlight_all=1
-syntax on
+" highlight keyword "self", add the following line into the file `$VIMRUNTIME/syntax/python.vim`, need ROOT
+"syn keyword pythonStatement self
 
-Plugin 'jnurmine/Zenburn'
-Plugin 'altercation/vim-colors-solarized'
+" Plugin 'altercation/vim-colors-solarized'
+syntax enable 
+set background=dark
+"let g:solarized_termcolors=256
+"let g:solarized_termtrans = 1
+"colorscheme solarized
 
-if has('gui_running')
-    set background=dark
-    colorscheme solarized
-else
-    colorscheme zenburn
-endif
-
-"Plugin 'jlanzarotta/bufexplorer'
-call togglebg#map("<F5>")
 
 map <F6> :call PRUN()<CR>
 func! PRUN()
@@ -123,9 +103,13 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 "autocmd vimenter * NERDTree
 "autocmd vimenter * wincmd p
 "窗口是否显示行号
-let g:NERDTreeShowLineNumbers=1
+"let g:NERDTreeShowLineNumbers=1
 ""窗口尺寸
 "let g:NERDTreeSize=25
+"let g:NERDTreeStatusline='%t'
+"状态栏不显示任何信息
+let g:NERDTreeStatusline = '%#NonText#'
+
 
 " 使用winmanager在左上和左下合并显示nerdtree和tagbar
 " 需要先安装ctags：sudo apt-get install exuberant-ctags
@@ -134,6 +118,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'vim-scripts/winmanager'
 let g:winManagerWindowLayout='NERDTree|Tagbar'
 let g:winManagerWidth=25
+"打开vim自动时自动打开winmanager
 let g:AutoOpenWinManager = 1 "这里要配合修改winmanager.vim文件，见下方说明
 "在winmanager/plugins/winmanager.vim开头加上：
 "if g:AutoOpenWinManager 
@@ -145,6 +130,17 @@ let g:AutoOpenWinManager = 1 "这里要配合修改winmanager.vim文件，见下
 nmap <silent> <F4> :NERDTreeToggle<CR>:TagbarToggle<CR>
 "切换窗口到nerdtree
 nnoremap <silent> <tab> H<C-W><C-H>
+"切换窗口到tagbar
+nnoremap <silent> <S-Tab> L<C-W><C-H>
+
+"改变tagbar状态栏颜色
+"see `:help g:tagbat_status_func` or
+"https://raw.githubusercontent.com/vim-scripts/Tagbar/master/doc/tagbar.txt
+function! TagbarStatusFunc(current, sort, fname, ...) abort
+    let colour = '%#StatusLine#'
+    return colour . '[' . a:sort . '] ' . a:fname
+endfunction
+let g:tagbar_status_func = 'TagbarStatusFunc'
 
 let g:NERDTree_title = "[NERDTree]"
 function! NERDTree_Start()
@@ -168,7 +164,7 @@ function! Tagbar_IsValid()
 	return 1
 endfunction
 
-let g:tagbar_vertical = 25
+let g:tagbar_vertical = 18
 
 "括号补全
 "inoremap ' ''<ESC>i
@@ -176,8 +172,79 @@ let g:tagbar_vertical = 25
 "inoremap ( ()<ESC>i
 "inoremap [ []<ESC>i
 "inoremap { {<CR>}<ESC>
+"使用插件
 Plugin 'jiangmiao/auto-pairs'
 
-"vim自动补齐Anaconda虚拟环境envs下的site-package
-let g:ycm_python_binary_path = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
+"安装ale实现实时代码检查，只支持vim8以上的版本
+Plugin 'dense-analysis/ale'
 
+"对python使用flake8进行语法检查
+let g:ale_linters = {
+\   'python': ['flake8'],
+\}
+
+"ale
+"始终开启标志列
+"let g:ale_sign_column_always = 1
+highlight clear ALEErrorSign " otherwise uses error bg color (typically red)
+highlight clear ALEWarningSign " otherwise uses error bg color (typically red)
+highlight clear SignColumn
+let g:ale_set_highlights = 0
+"自定义error和warning图标
+let g:ale_sign_error = ' ✘'
+let g:ale_sign_warning = ' !'
+"在vim自带的状态栏中整合ale
+let g:ale_statusline_format = ['✘ %d', '! %d', '✔ OK']
+"显示Linter名称,出错或警告等相关信息
+let g:ale_echo_msg_error_str = 'Error'
+let g:ale_echo_msg_warning_str = 'Warning'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+"普通模式下，前往上一个错误或警告，前往下一个错误或警告
+nmap <Leader>k <Plug>(ale_previous_wrap)
+nmap <Leader>j <Plug>(ale_next_wrap)
+"<Leader>s触发/关闭语法检查
+"nmap <Leader>s :ALEToggle<CR>
+"<Leader>d查看错误或警告的详细信息
+nmap <Leader>f :ALEDetail<CR>
+
+"vim 分屏竖线颜色与符号
+set fillchars=vert:\ 
+highlight VertSplit ctermfg=NONE cterm=bold
+
+"状态栏颜色（透明）
+highlight StatusLine cterm=bold ctermfg=NONE
+
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? '✔︎ OK': printf(
+    \   '!:%d ✘:%d',
+    \   all_non_errors,
+    \   all_errors
+    \)
+endfunction
+
+"修改状态栏
+"https://shapeshed.com/vim-statuslines/
+"http://yyq123.blogspot.com/2009/10/vim-statusline.html
+set statusline=
+set statusline+=%#PmenuSel#
+set statusline+=%#LineNr#
+"set statusline+=%m
+set statusline+=%=
+set statusline+=%#CursorColumn#
+set statusline+=\ %{LinterStatus()}
+"set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+"set statusline+=\ %{&fileformat}
+set statusline+=\ %p%%
+"set statusline+=\ %l:%c
+set statusline+=\ %y
+set statusline+=\ 
+
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
