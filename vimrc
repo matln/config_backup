@@ -1,6 +1,5 @@
 set nocompatible              " required
 filetype off                  " required
-
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -10,12 +9,10 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 
 Plugin 'VundleVim/Vundle.vim'
-" add all your plugins here (note older versions of Vundle
-" used Bundle instead of Plugin)
 
 "set mouse=a
 set hlsearch
-set nu!
+set nu
 ":noh     "cancel highlight
 set backspace=indent,eol,start
 
@@ -24,6 +21,17 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+"nnoremap <ESC> :nohl<cr>
+nnoremap <Up> kzz
+nnoremap <Down> jzz
+nnoremap - $
+" ctrl + s 与 ctrl + q 在linux系统下分别为锁定屏幕和复原
+" 在系统中禁用这两个按键，然后在vim中利用起来
+" 首先在~/.bashrc中加入：stty -ixon
+nnoremap <C-S> <C-u>
+inoremap <C-Q> <C-[>
+nnoremap <C-Q> <C-[>
+
 
 " Enable folding
 set foldmethod=marker
@@ -38,10 +46,13 @@ au BufNewFile,BufRead *.py
 \ set softtabstop=4 |
 \ set shiftwidth=4 |
 \ set textwidth=79 |
-\ set cc=79 |
+\ set cc=80 |
 \ set expandtab |        "Tab替换成空格
 \ set autoindent |       "自动缩进
 \ set fileformat=unix |  "保存文件格式
+
+set nowrap
+set sidescroll=1
 
 Plugin 'vim-scripts/indentpython.vim'
 
@@ -104,11 +115,11 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 "autocmd vimenter * wincmd p
 "窗口是否显示行号
 "let g:NERDTreeShowLineNumbers=1
-""窗口尺寸
-"let g:NERDTreeSize=25
 "let g:NERDTreeStatusline='%t'
 "状态栏不显示任何信息
 let g:NERDTreeStatusline = '%#NonText#'
+
+Plugin 'weilbith/nerdtree_choosewin-plugin'
 
 
 " 使用winmanager在左上和左下合并显示nerdtree和tagbar
@@ -117,7 +128,14 @@ let g:NERDTreeStatusline = '%#NonText#'
 Plugin 'majutsushi/tagbar'
 Plugin 'vim-scripts/winmanager'
 let g:winManagerWindowLayout='NERDTree|Tagbar'
-let g:winManagerWidth=25
+let g:NERDTreeWinSize= 15
+let g:tagbar_width = 10
+let g:tagbar_vertical = 23
+let g:tagbar_left = 0
+let g:winManagerWidth = 20
+
+set splitright
+
 "打开vim自动时自动打开winmanager
 let g:AutoOpenWinManager = 1 "这里要配合修改winmanager.vim文件，见下方说明
 "在winmanager/plugins/winmanager.vim开头加上：
@@ -164,7 +182,6 @@ function! Tagbar_IsValid()
 	return 1
 endfunction
 
-let g:tagbar_vertical = 18
 
 "括号补全
 "inoremap ' ''<ESC>i
@@ -189,12 +206,10 @@ let g:ale_linters = {
 highlight clear ALEErrorSign " otherwise uses error bg color (typically red)
 highlight clear ALEWarningSign " otherwise uses error bg color (typically red)
 highlight clear SignColumn
-let g:ale_set_highlights = 0
+"let g:ale_set_highlights = 1
 "自定义error和warning图标
 let g:ale_sign_error = ' ✘'
 let g:ale_sign_warning = ' !'
-"在vim自带的状态栏中整合ale
-let g:ale_statusline_format = ['✘ %d', '! %d', '✔ OK']
 "显示Linter名称,出错或警告等相关信息
 let g:ale_echo_msg_error_str = 'Error'
 let g:ale_echo_msg_warning_str = 'Warning'
@@ -242,9 +257,11 @@ set statusline+=\ %{LinterStatus()}
 set statusline+=\ %p%%
 "set statusline+=\ %l:%c
 set statusline+=\ %y
+set statusline+=\ %{winnr()}
 set statusline+=\ 
 
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
