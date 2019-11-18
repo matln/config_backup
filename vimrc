@@ -173,8 +173,6 @@ endfunction
 
 let g:Tagbar_title = "[Tagbar]"
 function! Tagbar_Start()
-	"执行一个退出命令，关闭自动出现的窗口"
-	exe 'q'
 	exe 'TagbarOpen'
 endfunction
 
