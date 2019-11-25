@@ -25,6 +25,7 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap <Up> kzz
 nnoremap <Down> jzz
 nnoremap - $
+vnoremap - $
 nnoremap y- y$
 nnoremap d- d$
 " ctrl + s 与 ctrl + q 在linux系统下分别为锁定屏幕和复原
@@ -43,9 +44,18 @@ Plugin 'tmhedberg/SimpylFold'
 let g:SimpylFold_docstring_preview=1
 
 au BufNewFile,BufRead *.sh
-\ set tabstop=4 |
-\ set softtabstop=4 |
-\ set shiftwidth=4 |
+\ set tabstop=2 |
+\ set softtabstop=2 |
+\ set shiftwidth=2 |
+\ set textwidth=79 |
+\ set expandtab |        "Tab替换成空格
+\ set autoindent |       "自动缩进
+
+au BufNewFile,BufRead *.pl
+\ nnoremap <cr> <S-A>;<C-c>o|
+\ set tabstop=2 |
+\ set softtabstop=2 |
+\ set shiftwidth=2 |
 \ set textwidth=79 |
 \ set expandtab |        "Tab替换成空格
 \ set autoindent |       "自动缩进
@@ -106,7 +116,10 @@ func! PRUN()
         exec "w"
         if &filetype == 'sh'
                 exec "!clear"
-                :!time bash %
+                exec "!time bash %"
+	elseif &filetype == 'perl'
+                exec "!clear"
+                exec "!time perl %"
         elseif &filetype == 'python'
                 exec "!clear"
                 exec "!time python3 %"
@@ -156,11 +169,11 @@ let g:AutoOpenWinManager = 1 "这里要配合修改winmanager.vim文件，见下
 "end
 
 "按F4同时打开或关闭nerdtree，tagbar
-nmap <silent> <F4> :NERDTreeToggle<CR>:TagbarToggle<CR>
+nnoremap <silent> <F4> :NERDTreeToggle<CR>:TagbarToggle<CR>
 "切换窗口到nerdtree
-"nnoremap <silent> <TAB> H<C-W><C-H>
+nnoremap <silent> <S-Tab> H<C-W><C-H>
 "切换窗口到tagbar
-nnoremap <silent> <S-Tab> L<C-W><C-H>
+"nnoremap <silent> <S-Tab> L<C-W><C-H>
 
 "改变tagbar状态栏颜色
 "see `:help g:tagbat_status_func` or

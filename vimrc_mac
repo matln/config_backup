@@ -135,8 +135,8 @@ autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(win
 "ignore files in NERDTree"
 let NERDTreeIgnore=['\.pyc$', '\~$'] 
 "打开vim时自动打开NERDTree
-"autocmd vimenter * NERDTree
-"autocmd vimenter * wincmd p
+autocmd vimenter * NERDTree
+autocmd vimenter * wincmd p
 "窗口是否显示行号
 "let g:NERDTreeShowLineNumbers=1
 "let g:NERDTreeStatusline='%t'
@@ -145,36 +145,10 @@ let g:NERDTreeStatusline = '%#NonText#'
 
 Plugin 'weilbith/nerdtree_choosewin-plugin'
 
-
 " 使用winmanager在左上和左下合并显示nerdtree和tagbar
 " 需要先安装ctags：sudo apt-get install exuberant-ctags
 " 或从源码安装
 Plugin 'majutsushi/tagbar'
-Plugin 'vim-scripts/winmanager'
-let g:winManagerWindowLayout='NERDTree|Tagbar'
-let g:NERDTreeWinSize= 15
-let g:tagbar_width = 10
-let g:tagbar_vertical = 23
-let g:tagbar_left = 0
-let g:winManagerWidth = 20
-
-set splitright
-
-"打开vim自动时自动打开winmanager
-let g:AutoOpenWinManager = 1 "这里要配合修改winmanager.vim文件，见下方说明
-"在winmanager/plugins/winmanager.vim开头加上：
-"if g:AutoOpenWinManager 
-"	autocmd VimEnter * nested call s:ToggleWindowsManager()|1wincmd l 
-"	"vim进入时自动执行 ToggleWindowsManager ，然后移动一次窗口焦点
-"end
-
-"按F4同时打开或关闭nerdtree，tagbar
-nnoremap <silent> <F4> :NERDTreeToggle<CR>:TagbarToggle<CR>
-"切换窗口到nerdtree
-nnoremap <silent> <S-Tab> H<C-W><C-H>
-"切换窗口到tagbar
-"nnoremap <silent> <S-Tab> L<C-W><C-H>
-
 "改变tagbar状态栏颜色
 "see `:help g:tagbat_status_func` or
 "https://raw.githubusercontent.com/vim-scripts/Tagbar/master/doc/tagbar.txt
@@ -183,26 +157,52 @@ function! TagbarStatusFunc(current, sort, fname, ...) abort
     return colour . '[' . a:sort . '] ' . a:fname
 endfunction
 let g:tagbar_status_func = 'TagbarStatusFunc'
+autocmd BufReadPost *.cpp,*.c,*.sh,*.py call tagbar#autoopen()
 
-let g:NERDTree_title = "[NERDTree]"
-function! NERDTree_Start()
-	"执行一个退出命令，关闭自动出现的窗口"
-	exe 'q'
-	exe 'NERDTree'
-endfunction
+" Plugin 'matln/winmanager'
+" let g:winManagerWindowLayout='NERDTree|Tagbar'
+let g:NERDTreeWinSize= 20
+let g:tagbar_width = 20
+" let g:tagbar_vertical = 23
+let g:tagbar_left = 0
+" let g:winManagerWidth = 20
 
-function! NERDTree_IsValid()
-	return 1
-endfunction
+set splitright
 
-let g:Tagbar_title = "[Tagbar]"
-function! Tagbar_Start()
-	exe 'TagbarOpen'
-endfunction
+" "打开vim自动时自动打开winmanager
+" let g:AutoOpenWinManager = 1 "这里要配合修改winmanager.vim文件，见下方说明
+" "在winmanager/plugins/winmanager.vim开头加上：
+" "if g:AutoOpenWinManager 
+" "	autocmd VimEnter * nested call s:ToggleWindowsManager()|1wincmd l 
+" "	"vim进入时自动执行 ToggleWindowsManager ，然后移动一次窗口焦点
+" "end
+" 
+" "按F4同时打开或关闭nerdtree，tagbar
+" nnoremap <silent> <F4> :NERDTreeToggle<CR>:TagbarToggle<CR>
+" "切换窗口到nerdtree
+" nnoremap <silent> <S-Tab> H<C-W><C-H>
+" "切换窗口到tagbar
+" "nnoremap <silent> <S-Tab> L<C-W><C-H>
 
-function! Tagbar_IsValid()
-	return 1
-endfunction
+" let g:NERDTree_title = "[NERDTree]"
+" function! NERDTree_Start()
+" 	"执行一个退出命令，关闭自动出现的窗口"
+" 	exe 'q'
+" 	exe 'NERDTree'
+" endfunction
+" 
+" function! NERDTree_IsValid()
+" 	return 1
+" endfunction
+" 
+" let g:Tagbar_title = "[Tagbar]"
+" function! Tagbar_Start()
+" 	exe 'TagbarOpen'
+" endfunction
+" 
+" function! Tagbar_IsValid()
+" 	return 1
+" endfunction
 
 
 "括号补全
