@@ -92,8 +92,8 @@ let g:ycm_autoclose_preview_window_after_completion=1
 let mapleader = ","
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "vim自动补齐Anaconda虚拟环境envs下的site-package
-let g:ycm_python_binary_path = '/Users/lijianchen/anaconda3/envs/pytorch/bin/python'
-"let g:ycm_python_binary_path = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
+" let g:ycm_python_binary_path = '/Users/lijianchen/anaconda3/envs/pytorch/bin/python'
+let g:ycm_python_binary_path = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
 
 "需要先在系统安装flake8, 通过pip
 Plugin 'nvie/vim-flake8'
@@ -126,9 +126,10 @@ func! PRUN()
         endif
 endfunc
 
+
 Plugin 'scrooloose/nerdtree'
 "F4快捷键快速切换打开和关闭目录树窗口
-"map <F4> :NERDTreeToggle<CR>
+noremap <F2> :NERDTreeToggle<CR>
 noremap <F3> :NERDTreeFind 
 "当剩余的窗口都不是文件编辑窗口时，自动退出vim
 autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | qa! | endif
@@ -157,12 +158,15 @@ function! TagbarStatusFunc(current, sort, fname, ...) abort
     return colour . '[' . a:sort . '] ' . a:fname
 endfunction
 let g:tagbar_status_func = 'TagbarStatusFunc'
-autocmd BufReadPost *.cpp,*.c,*.sh,*.py call tagbar#autoopen()
+autocmd BufReadPost *.cpp,*.c,*.sh,*.py,*.pl call tagbar#autoopen()
+noremap <F4> :TagbarToggle<CR>
+
+" let g:tagbar_ctags_bin='/usr/bin/ctags'
 
 " Plugin 'matln/winmanager'
 " let g:winManagerWindowLayout='NERDTree|Tagbar'
-let g:NERDTreeWinSize= 20
-let g:tagbar_width = 20
+let g:NERDTreeWinSize= 25
+let g:tagbar_width = 25
 " let g:tagbar_vertical = 23
 let g:tagbar_left = 0
 " let g:winManagerWidth = 20
@@ -270,14 +274,14 @@ endfunction
 set statusline=
 set statusline+=%#PmenuSel#
 set statusline+=%#LineNr#
-"set statusline+=%m
 set statusline+=%=
 set statusline+=%#CursorColumn#
 set statusline+=\ %{LinterStatus()}
-"set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-"set statusline+=\ %{&fileformat}
+" set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+" set statusline+=\ %{&fileformat}
 set statusline+=\ %p%%
 "set statusline+=\ %l:%c
+"set statusline+=\ %t
 set statusline+=\ %y
 set statusline+=\ %{winnr()}
 set statusline+=\ 
