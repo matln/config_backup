@@ -396,26 +396,40 @@ nmap <Leader>d :ALEDetail<CR>
 Plugin 'itchyny/lightline.vim'
 Plugin 'maximbaz/lightline-ale'
 Plugin 'ryanoasis/vim-devicons'
+" https://github.com/itchyny/lightline.vim/blob/master/autoload/lightline.vim
 " https://github.com/itchyny/lightline.vim/issues/369
 " colorscheme 记得在 dracula.vim 中分别调换下 warning 和 error 的文字背景颜色
 let g:lightline = {
       \  'colorscheme': 'dracula',
       \  'active': {
-      \      'left': [['mode', 'paste'], [ 'Filename', 'Modified' ]],
+      \      'left': [['Mode', 'paste'], [ 'Filename', 'Modified' ]],
       \      'right': [
       \          [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
       \          [ 'LineInfo' ],
-      \          [ 'fileencoding', 'FileFormat'] ],
+      \          [ 'FileEncoding', 'FileFormat'] ],
+      \  },
+      \   'inactive': {
+      \      'left': [[ 'InFilename' ]],
+      \      'right': [
+      \          [ 'LineInfo' ],
+      \          [ 'FileEncoding', 'FileFormat'] ],
       \  },
       \  'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
       \  'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
+      \  'mode_map': {
+      \      'n': 'NORMAL', 'i': 'INSERT', 'R': 'REPLACE', 'v': 'VISUAL', 'V': 'V-LINE', "\<C-v>": 'V-BLOCK',
+      \      'c': 'COMMAND', 's': 'SELECT', 'S': 'S-LINE', "\<C-s>": 'S-BLOCK', 't': 'TERMINAL'
+      \   },
       \  'component': {
       \      'percent': '%2p%%', 'percentwin': '%P'
       \  },
       \  'component_function': {
+      \      'Mode':            'GetMode',
       \      'Filename':        'GetFilenameIcon',
+      \      'InFilename':      'GetInFilenameIcon',
       \      'LineInfo':        'GetLineInfo',
       \      'FileFormat':      'GetFileFormat',
+      \      'FileEncoding':    'GetFileEncoding',
       \      'Modified':        'GetModified',
       \  },
       \  'component_expand': {
@@ -431,9 +445,20 @@ let g:lightline = {
       \      'linter_ok': 'left',
       \  },
       \ }
+" Mode {{{
+function! GetMode() abort
+    if &buftype == 'terminal'
+        return toupper(&buftype)
+    elseif s:IsSpecial()
+        return toupper(&filetype)
+    endif
+    return get(g:lightline.mode_map, mode(), '')
+endfunction
+" }}}
+
 " Filename {{{
 function! s:IsSpecial() abort
-    return &buftype == 'terminal' || &filetype =~ '\v(help|startify|defx|undotree)'
+    return &buftype == 'terminal' || &filetype =~ '\v(help|startify|nerdtree|undotree)'
 endfunction
 
 function! s:GetFilename()
@@ -443,7 +468,19 @@ endfunction
 
 function! GetFilenameIcon() abort
     if s:IsSpecial()
-        return ""
+        return "" 
+    endif
+    if empty(expand('%:t'))
+        return '[No Name]'
+    endif
+    let filename = s:GetFilename()
+    let icon = strlen(&filetype) ? " " . WebDevIconsGetFileTypeSymbol() : "no ft"
+    return join([filename, icon], "")
+endfunction
+
+function! GetInFilenameIcon() abort
+    if s:IsSpecial()
+        return toupper(&filetype) 
     endif
     if empty(expand('%:t'))
         return '[No Name]'
@@ -470,6 +507,9 @@ endfunction
 
 " LineInfo {{{
 function! GetLineInfo() abort
+    if s:IsSpecial()
+        return ""
+    endif
     return printf('%2d:%-2d ☰  %2d%%', line('.'), col('.'), 100 * line('.') / line('$'))
 endfunction
 " }}}
@@ -481,6 +521,15 @@ function! GetFileFormat()
     endif
     return &fileformat . " " . WebDevIconsGetFileFormatSymbol()
 endfunction
+
+" FileEncoding {{{
+function! GetFileEncoding()
+    if s:IsSpecial() || winwidth(0) <= 70
+        return ""
+    endif
+    return empty(&fenc) ? &enc : &fenc
+endfunction
+" }}}
 " }}}
 
 
