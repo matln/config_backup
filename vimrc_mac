@@ -510,7 +510,7 @@ function! GetLineInfo() abort
     if s:IsSpecial()
         return ""
     endif
-    return printf('%2d:%-2d ☰  %2d%%', line('.'), col('.'), 100 * line('.') / line('$'))
+    return printf("%2d:%-2d ☰  %2d%%", line('.'), col('.'), 100 * line('.') / line('$'))
 endfunction
 " }}}
 
