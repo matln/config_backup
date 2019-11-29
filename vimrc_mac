@@ -397,6 +397,7 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'maximbaz/lightline-ale'
 Plugin 'ryanoasis/vim-devicons'
 " https://github.com/itchyny/lightline.vim/issues/369
+" colorscheme 记得在 dracula.vim 中分别调换下 warning 和 error 的文字背景颜色
 let g:lightline = {
       \  'colorscheme': 'dracula',
       \  'active': {
