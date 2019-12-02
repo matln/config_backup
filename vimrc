@@ -25,6 +25,7 @@ set autoindent       "自动缩进
 set nowrap
 set sidescroll=1
 set splitright
+set splitbelow
 set laststatus=2
 "vim 分屏竖线颜色与符号
 set fillchars=vert:\ 
@@ -38,13 +39,15 @@ let g:SimpylFold_docstring_preview=1
 " }}}
 
 " ---------------------- Mappings ------------------- {{{
+let mapleader = ","
+let maplocalleader = ","
 "split navigations
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
+nnoremap <C-J> jzz
+nnoremap <C-K> kzz
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-nnoremap <Up> kzz
-nnoremap <Down> jzz
+nnoremap <Up> <C-y>
+nnoremap <Down> <C-e>
 onoremap - $
 nnoremap - $
 vnoremap - $
@@ -53,12 +56,34 @@ vnoremap - $
 " 首先在~/.bashrc中加入：stty -ixon
 nnoremap <C-S> <C-u>
 nnoremap <silent> <C-Q> :nohl<CR>
-let mapleader = ","
-let maplocalleader = ","
 " inside nest parentheses
 onoremap in( :<c-u>normal! f(vi(<cr>    
 " inside previous parentheses
 onoremap ip( :<c-u>normal! F)vi(<cr>    
+" shell command
+nnoremap <leader>s :!
+
+" 删除而非剪贴
+" https://stackoverflow.com/questions/11993851/how-to-delete-not-cut-in-vim
+" "_是黑洞寄存器，通常的 x,d 操作把内容放在了匿名寄存器
+" 删除
+nnoremap x "_x
+nnoremap X "_X
+nnoremap d "_d
+nnoremap dd "_dd
+nnoremap D "_D
+vnoremap d "_d
+vnoremap dd "_dd
+" 剪贴：通过 visual 模式下的 x，或者前面加<leader>表示原来的剪贴
+" nnoremap <leader>x ""x
+" nnoremap <leader>X ""X
+" nnoremap <leader>d ""d
+" nnoremap <leader>dd ""dd
+" nnoremap <leader>D ""D
+" vnoremap <leader>d ""d
+" vnoremap <leader>dd ""dd
+" 系统剪切板与匿名寄存器相通
+set clipboard=unnamed
 " }}}
 
 
@@ -224,6 +249,7 @@ endif
 
 
 noremap <F6> :call PRUN()<CR>
+" `time` 是 shell 中的计时器，`%` 是 vimscript 中的，表示正在编辑文件的相对路径 
 function! PRUN()
     execute "w"
     if &filetype == 'sh'
@@ -248,7 +274,7 @@ noremap <F2> :NERDTreeFind
 "当剩余的窗口都不是文件编辑窗口时，自动退出vim
 autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | qa! | endif
 "ignore files in NERDTree"
-let NERDTreeIgnore=['\.pyc$', '\~$']
+let NERDTreeIgnore=['\.pyc$', '\~$', '\.lock']
 "打开vim时自动打开NERDTree
 "autocmd vimenter *.py,*.sh,*.pl NERDTree|wincmd p
 "窗口是否显示行号
@@ -329,6 +355,7 @@ let g:NERDTreeWinSize= 25
 "inoremap { {<CR>}<ESC>
 "使用插件
 Plugin 'jiangmiao/auto-pairs'
+let g:AutoPairsShortcutFastWrap = '<C-e>'
 
 " ale
 " 安装ale实现实时代码检查，只支持vim8以上的版本
@@ -396,6 +423,8 @@ nmap <Leader>d :ALEDetail<CR>
 " set statusline+=\ %{winnr()}
 " set statusline+=\ 
 
+" git wrapper
+Plugin 'tpope/vim-fugitive'
 Plugin 'itchyny/lightline.vim'
 Plugin 'maximbaz/lightline-ale'
 Plugin 'ryanoasis/vim-devicons'
@@ -405,7 +434,7 @@ Plugin 'ryanoasis/vim-devicons'
 let g:lightline = {
       \  'colorscheme': 'dracula',
       \  'active': {
-      \      'left': [['Mode', 'paste'], [ 'Filename', 'Modified' ]],
+      \      'left': [['Mode', 'paste'], ['GitInfo'], [ 'Filename', 'Modified' ]],
       \      'right': [
       \          [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
       \          [ 'LineInfo' ],
@@ -428,6 +457,7 @@ let g:lightline = {
       \  },
       \  'component_function': {
       \      'Mode':            'GetMode',
+      \      'GitInfo':         'GetGitInfo',
       \      'Filename':        'GetFilenameIcon',
       \      'InFilename':      'GetInFilenameIcon',
       \      'LineInfo':        'GetLineInfo',
@@ -459,9 +489,20 @@ function! GetMode() abort
 endfunction
 " }}}
 
+" GitInfo {{{
+function! GetGitInfo() abort
+    if s:IsSpecial()
+        return ""
+    endif
+    let GitBranch = "\uf126 " . fugitive#head()
+    return GitBranch 
+endfunction
+" }}}
+
 " Filename {{{
 function! s:IsSpecial() abort
-    return &buftype == 'terminal' || &filetype =~ '\v(help|startify|nerdtree|undotree)'
+    " qf: markdown toc
+    return &buftype == 'terminal' || &filetype =~ '\v(help|startify|nerdtree|qf)'
 endfunction
 
 function! s:GetFilename()
@@ -484,8 +525,7 @@ endfunction
 function! GetInFilenameIcon() abort
     if s:IsSpecial()
         return toupper(&filetype) 
-    endif
-    if empty(expand('%:t'))
+    elseif empty(expand('%:t'))
         return '[No Name]'
     endif
     let filename = s:GetFilename()
@@ -545,7 +585,11 @@ let g:lightline#ale#indicator_ok = "\uf00c"
 "}}}
 
 " fzf
-set rtp+=/usr/local/opt/fzf
+if has('mac')
+    set rtp+=/usr/local/opt/fzf
+elseif has('unix')
+    set rtp+=~/.fzf
+endif
 Plugin 'junegunn/fzf.vim'
 "<Leader>f在当前目录搜索文件
 nnoremap <silent> <Leader>f :Files<CR>
@@ -612,6 +656,21 @@ function! s:btags()
 endfunction
 
 command! BTags call s:btags()
+
+" ------------------------------ markdown ---------------------------- {{{
+if has('mac')
+    Plugin 'godlygeek/tabular'
+    Plugin 'plasticboy/vim-markdown'
+    let g:vim_markdown_toc_autofit = 1
+    autocmd! BufNewFile,BufRead *.md setlocal wrap
+    autocmd FileType markdown nnoremap <silent> <buffer> <localleader>t :Toc<cr>:vertical resize 40<cr>|
+    \ nnoremap <silent> <buffer> <localleader>w :w<cr>:Toc<cr>:vertical resize 40<cr><c-w><c-h>
+
+    Plugin 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install'  }
+    " let g:mkdp_browser = 'chrome'
+endif 
+
+"  }}}
 
 
 " All of your Plugins must be added before the following line
