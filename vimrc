@@ -46,6 +46,12 @@ nnoremap <C-J> jzz
 nnoremap <C-K> kzz
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+inoremap <C-J> <Down>
+inoremap <C-K> <Up>
+inoremap <C-L> <Right>
+" autopairs 插件默认把 <C-H> 映射成了 <BS>
+let g:AutoPairsMapCh = 0
+inoremap <C-H> <Left>
 nnoremap <Up> <C-y>
 nnoremap <Down> <C-e>
 onoremap - $
