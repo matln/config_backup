@@ -1,13 +1,9 @@
-set nocompatible              " required
-filetype off                  " required
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Neovim config
+" Firstly, build symbolic link:
+" ln -s ~/.init.vim ~/.config/nvim/init.vim
 
-" alternatively, pass a path where Vundle should install plugins "call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Vim-plug
+call plug#begin('~/.local/share/nvim/plugged')
 
 " --------------  Basic Settings -------------------- {{{
 "set mouse=a
@@ -34,7 +30,7 @@ highlight VertSplit ctermfg=NONE cterm=bold
 set foldmethod=marker
 set foldlevel=99
 
-Plugin 'tmhedberg/SimpylFold'
+Plug 'tmhedberg/SimpylFold'
 let g:SimpylFold_docstring_preview=1
 " }}}
 
@@ -94,8 +90,8 @@ set clipboard=unnamed
 
 
 " -------------------- Colorscheme ------------------ {{{
-Plugin 'dracula/vim', { 'name': 'dracula' }
-set rtp+=~/.vim/bundle/dracula
+Plug 'dracula/vim', { 'as': 'dracula' }
+set rtp+=~/.local/share/nvim/plugged/dracula
 colorscheme dracula
 set termguicolors
 syntax on
@@ -149,21 +145,21 @@ augroup END
 " }}}
 
 " ------------------ python settings ---------------- {{{
-Plugin 'vim-scripts/indentpython.vim'
+Plug 'vim-scripts/indentpython.vim'
 
 "Flagging Unnecessary Whitespace
 "highlight BadWhitespace ctermbg=red guibg=darkred
 "au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 " 按照pep8标准自动格式化
-Plugin 'tell-k/vim-autopep8'
+Plug 'tell-k/vim-autopep8'
 
 let python_highlight_all=1
 " highlight keyword "self", add the following line into the file `$VIMRUNTIME/syntax/python.vim`, need ROOT
 "syn keyword pythonStatement self
 
 "需要先在系统安装flake8, 通过pip
-Plugin 'nvie/vim-flake8'
+Plug 'nvie/vim-flake8'
 augroup python
     autocmd!
     autocmd BufNewFile,BufRead *.py setlocal textwidth=79 cc=80 fileformat=unix
@@ -242,18 +238,6 @@ function! s:IsComment(str, type)
 endfunction
 " }}}
 
-" ----------------------------- YCM ----------------------------- {{{
-Bundle 'Valloric/YouCompleteMe'
-let g:ycm_autoclose_preview_window_after_completion=1
-map <silent> gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-" vim自动补齐Anaconda虚拟环境envs下的site-package
-if has('mac')
-    let g:ycm_python_binary_path = '/Users/lijianchen/anaconda3/envs/pytorch/bin/python'
-elseif has('unix')
-    let g:ycm_python_binary_path = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
-endif
-"  }}}
-
 
 " -------------------------------- RUN ------------------------- {{{
 
@@ -276,8 +260,8 @@ endfunction
 
 
 " --------------------------------- NERDTree -------------------------- {{{
-Plugin 'scrooloose/nerdtree'
-Plugin 'weilbith/nerdtree_choosewin-plugin'
+Plug 'scrooloose/nerdtree'
+Plug 'weilbith/nerdtree_choosewin-plugin'
 "F4快捷键快速切换打开和关闭目录树窗口
 noremap <silent> <F3> :NERDTreeToggle<CR>
 noremap <F2> :NERDTreeFind
@@ -295,170 +279,36 @@ let g:NERDTreeStatusline = '%#NonText#'
 let g:NERDTreeWinSize= 25
 "  }}}
 
-" winmanager
-" " 使用winmanager在左上和左下合并显示nerdtree和tagbar
-" " 需要先安装ctags：sudo apt-get install exuberant-ctags
-" " 或从源码安装
-" Plugin 'majutsushi/tagbar'
-" "改变tagbar状态栏颜色
-" "see `:help g:tagbat_status_func` or
-" "https://raw.githubusercontent.com/vim-scripts/Tagbar/master/doc/tagbar.txt
-" function! TagbarStatusFunc(current, sort, fname, ...) abort
-"     let colour = '%#StatusLine#'
-"     return colour . '[' . a:sort . '] ' . a:fname
-" endfunction
-" let g:tagbar_status_func = 'TagbarStatusFunc'
-" autocmd BufReadPost *.cpp,*.c,*.sh,*.py,*.pl call tagbar#autoopen()
-" noremap <F4> :TagbarToggle<CR>
-" 
-" let g:tagbar_width = 25
-" " let g:tagbar_vertical = 23
-" let g:tagbar_left = 0
-
-" let g:tagbar_ctags_bin='/usr/bin/ctags'
-
-" Plugin 'matln/winmanager'
-" let g:winManagerWindowLayout='NERDTree|Tagbar'
-" let g:winManagerWidth = 20
-
-" "打开vim自动时自动打开winmanager
-" let g:AutoOpenWinManager = 1 "这里要配合修改winmanager.vim文件，见下方说明
-" "在winmanager/plugins/winmanager.vim开头加上：
-" "if g:AutoOpenWinManager 
-" "	autocmd VimEnter * nested call s:ToggleWindowsManager()|1wincmd l 
-" "	"vim进入时自动执行 ToggleWindowsManager ，然后移动一次窗口焦点
-" "end
-" 
-" "按F4同时打开或关闭nerdtree，tagbar
-" nnoremap <silent> <F4> :NERDTreeToggle<CR>:TagbarToggle<CR>
-" "切换窗口到nerdtree
-" nnoremap <silent> <S-Tab> H<C-W><C-H>
-" "切换窗口到tagbar
-" "nnoremap <silent> <S-Tab> L<C-W><C-H>
-
-" let g:NERDTree_title = "[NERDTree]"
-" function! NERDTree_Start()
-" 	"执行一个退出命令，关闭自动出现的窗口"
-" 	exe 'q'
-" 	exe 'NERDTree'
-" endfunction
-" 
-" function! NERDTree_IsValid()
-" 	return 1
-" endfunction
-" 
-" let g:Tagbar_title = "[Tagbar]"
-" function! Tagbar_Start()
-" 	exe 'TagbarOpen'
-" endfunction
-" 
-" function! Tagbar_IsValid()
-" 	return 1
-" endfunction
-
 
 " ----------------------------------- 括号补全 -------------------------- {{{
-"inoremap ' ''<ESC>i
-"inoremap " ""<ESC>i
-"inoremap ( ()<ESC>i
-"inoremap [ []<ESC>i
-"inoremap { {<CR>}<ESC>
-"使用插件
-Plugin 'jiangmiao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 let g:AutoPairsShortcutFastWrap = '<C-e>'
 "  }}}
 
 
-" ----------------------------------- ale ---------------------------- {{{
-" 安装ale实现实时代码检查，只支持vim8以上的版本
-Plugin 'dense-analysis/ale'
-
-"对python使用flake8进行语法检查
-let g:ale_linters = {
-\   'python': ['flake8'],
-\}
-
-"始终开启标志列
-"let g:ale_sign_column_always = 1
-highlight clear ALEErrorSign " otherwise uses error bg color (typically red)
-highlight clear ALEWarningSign " otherwise uses error bg color (typically red)
-highlight clear SignColumn
-"let g:ale_set_highlights = 1
-"自定义error和warning图标
-let g:ale_sign_error = ' ✘'
-let g:ale_sign_warning = " \uf0e7"
-"显示Linter名称,出错或警告等相关信息
-let g:ale_echo_msg_error_str = 'Error'
-let g:ale_echo_msg_warning_str = 'Warning'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-"普通模式下，前往上一个错误或警告，前往下一个错误或警告
-"nnoremap 不知道为什么出错
-nmap <leader>k <Plug>(ale_previous_wrap)
-nmap <leader>j <Plug>(ale_next_wrap)
-"<Leader>s触发/关闭语法检查
-"nmap <Leader>s :ALEToggle<CR>
-"<Leader>d查看错误或警告的详细信息
-nmap <Leader>d :ALEDetail<CR>
-"  }}}
-
-
 " ----------------------------- vista.vim --------------------------- {{{
-Plugin 'liuchengxu/vista.vim'
+Plug 'liuchengxu/vista.vim'
 autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
 
 "  }}}
 
-" --------------------------- statusline ------------------------- {{{
-"状态栏颜色（透明）
-"highlight StatusLine cterm=bold ctermfg=NONE
-
-" function! LinterStatus() abort
-"     let l:counts = ale#statusline#Count(bufnr(''))
-"     let l:all_errors = l:counts.error + l:counts.style_error
-"     let l:all_non_errors = l:counts.total - l:all_errors
-"     return l:counts.total == 0 ? '✔︎ OK': printf(
-"     \   '!:%d ✘:%d',
-"     \   all_non_errors,
-"     \   all_errors
-"     \)
-" endfunction
-
-" "修改状态栏
-" "https://shapeshed.com/vim-statuslines/
-" "http://yyq123.blogspot.com/2009/10/vim-statusline.html
-" set statusline=
-" "set statusline=\ \>\ %f%m
-" "set statusline+=%#PmenuSel#
-" set statusline+=%#LineNr#
-" set statusline+=%=
-" set statusline+=%#CursorColumn#
-" set statusline+=\ %{LinterStatus()}
-" set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-" set statusline+=\ %{&fileformat}
-" set statusline+=\ %p%%
-" "set statusline+=\ %l:%c
-" "set statusline+=\ %t
-" set statusline+=\ %y
-" set statusline+=\ %{winnr()}
-" set statusline+=\ 
-
+" --------------------------- lightline ------------------------- {{{
 " git wrapper
-Plugin 'tpope/vim-fugitive'
-Plugin 'itchyny/lightline.vim'
-Plugin 'maximbaz/lightline-ale'
-Plugin 'ryanoasis/vim-devicons'
+Plug 'tpope/vim-fugitive'
+Plug 'itchyny/lightline.vim'
+Plug 'ryanoasis/vim-devicons'
 " https://github.com/itchyny/lightline.vim/blob/master/autoload/lightline.vim
 " https://github.com/itchyny/lightline.vim/issues/369
 " colorscheme 记得在 dracula.vim 中分别调换下 warning 和 error 的文字背景颜色
 let g:lightline = {
       \  'colorscheme': 'dracula',
       \  'active': {
-      \      'left': [['Mode', 'paste'], ['GitInfo'], [ 'Filename', 'Modified', 'VistaNearestFunction' ]],
+      \      'left': [['Mode', 'paste'], ['GitInfo'], [ 'Filename', 'Modified' ], [ 'VistaNearestFunction' ]],
       \      'right': [
-      \          [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
+      \          [ 'CocStatus' ],
       \          [ 'LineInfo' ],
-      \          [ 'FileEncoding', 'FileFormat'] ],
+      \          [ 'FileEncoding', 'FileFormat' ] ],
       \  },
       \   'inactive': {
       \      'left': [[ 'InFilename' ]],
@@ -479,24 +329,13 @@ let g:lightline = {
       \      'Mode':                   'GetMode',
       \      'GitInfo':                'GetGitInfo',
       \      'Filename':               'GetFilenameIcon',
-      \      'InFilename':             'GetInFilenameIcon',
       \      'LineInfo':               'GetLineInfo',
+      \      'InFilename':             'GetInFilenameIcon',
       \      'FileFormat':             'GetFileFormat',
       \      'FileEncoding':           'GetFileEncoding',
       \      'Modified':               'GetModified',
       \      'VistaNearestFunction':   'NearestMethodOrFunction', 
-      \  },
-      \  'component_expand': {
-      \      'linter_checking': 'lightline#ale#checking',
-      \      'linter_warnings': 'lightline#ale#warnings',
-      \      'linter_errors': 'lightline#ale#errors',
-      \      'linter_ok': 'lightline#ale#ok',
-      \  },
-      \  'component_type': {
-      \      'linter_checking': 'left',
-      \      'linter_warnings': 'warning',
-      \      'linter_errors': 'error',
-      \      'linter_ok': 'left',
+      \      'CocStatus':              'coc#status'
       \  },
       \ }
 " Mode {{{
@@ -539,8 +378,8 @@ function! GetFilenameIcon() abort
         return '[No Name]'
     endif
     let filename = s:GetFilename()
-    let icon = strlen(&filetype) ? " " . WebDevIconsGetFileTypeSymbol() : "no ft"
-    return join([filename, icon], "")
+    let icon = strlen(&filetype) ? WebDevIconsGetFileTypeSymbol() . " " : "no ft"
+    return join([icon, filename], "")
 endfunction
 
 function! GetInFilenameIcon() abort
@@ -551,7 +390,7 @@ function! GetInFilenameIcon() abort
     endif
     let filename = s:GetFilename()
     let icon = strlen(&filetype) ? " " . WebDevIconsGetFileTypeSymbol() : "no ft"
-    return join([filename, icon], "")
+    return join([icon, filename], "")
 endfunction
 
 function! s:IsModified() abort
@@ -597,17 +436,14 @@ endfunction
 
 " show the nearest method/function in your statusline
 function! NearestMethodOrFunction() abort
-    return get(b:, 'vista_nearest_method_or_function', '')
+    let lens = len(get(b:, 'vista_nearest_method_or_function', ''))
+    if lens == 0
+        return ''
+    else
+        return "\uF794#" . get(b:, 'vista_nearest_method_or_function', '')
+    endif
 endfunction
 " }}}
-
-
-" https://fontawesome.com/icons?d=gallery&m=free
-" install nerd-font: https://github.com/ryanoasis/nerd-fonts
-let g:lightline#ale#indicator_checking = "\uf110"
-let g:lightline#ale#indicator_warnings = "\uf071 :"
-let g:lightline#ale#indicator_errors = "\uf05e :"
-let g:lightline#ale#indicator_ok = "\uf00c"
 "}}}
 
 " -------------------------------------- fzf -------------------------- {{{
@@ -616,7 +452,7 @@ if has('mac')
 elseif has('unix')
     set rtp+=~/.fzf
 endif
-Plugin 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim'
 "<Leader>f在当前目录搜索文件
 nnoremap <silent> <Leader>f :Files<CR>
 "<Leader>b切换Buffer中的文件
@@ -687,19 +523,71 @@ command! BTags call s:btags()
 
 " ------------------------------ markdown ---------------------------- {{{
 if has('mac')
-    Plugin 'godlygeek/tabular'
-    Plugin 'plasticboy/vim-markdown'
+    Plug 'godlygeek/tabular'
+    Plug 'plasticboy/vim-markdown'
     let g:vim_markdown_toc_autofit = 1
     autocmd! BufNewFile,BufRead *.md setlocal wrap
     autocmd FileType markdown nnoremap <silent> <buffer> <localleader>t :Toc<cr>:vertical resize 40<cr>|
     \ nnoremap <silent> <buffer> <localleader>w :w<cr>:Toc<cr>:vertical resize 40<cr><c-w><c-h>
 
-    Plugin 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install'  }
+    Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install'  }
     " let g:mkdp_browser = 'chrome'
 endif 
 "  }}}
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+" ----------------------------- coc.nvim ---------------------------- {{{
 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" if hidden is not set, TextEdit might fail.
+set hidden
+
+" Some servers have issues with backup files, see #649
+set nobackup
+set nowritebackup
+
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+let g:coc_status_error_sign = '✘:'
+let g:coc_status_warning_sign = "\uf0e7:"
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Or use `complete_info` if your vim support it, like:
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+"  }}}
+
+
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()

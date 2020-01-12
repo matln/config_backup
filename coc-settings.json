@@ -1,0 +1,8 @@
+{
+  "diagnostic.errorSign": "✘",
+  "diagnostic.warningSign": "\uf0e7",
+  "diagnostic.infoSign": "",
+  "diagnostic-languageserver.filetypes": {
+    "sh": "shellcheck"
+  },
+}
