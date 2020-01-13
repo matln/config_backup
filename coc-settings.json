@@ -2,7 +2,12 @@
   "diagnostic.errorSign": "✘",
   "diagnostic.warningSign": "\uf0e7",
   "diagnostic.infoSign": "",
-  "diagnostic-languageserver.filetypes": {
-    "sh": "shellcheck"
-  },
+  "languageserver": {
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
+    }
+  }
 }
