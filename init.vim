@@ -6,7 +6,6 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
 " --------------  Basic Settings -------------------- {{{
-"set mouse=a
 set helplang=cn        " 中文帮助文档
 set encoding=utf-8
 set hlsearch incsearch    " 高亮搜索结果, incsearch则令Vim在你正打着搜索内容时就高亮下一个匹配项
@@ -135,11 +134,6 @@ augroup END
 " ------------------- vimscript settings ----------------- {{{
 augroup vimscript
     autocmd!
-    command! -nargs=0 VimSetcomment call s:SET_COMMENT("vim")
-    command! -nargs=0 VimSetcommentV call s:SET_COMMENTV("vim")
-    autocmd FileType vim vnoremap <silent> <buffer> <localleader>/ <ESC>:VimSetcommentV<CR>	
-    autocmd FileType vim nnoremap <silent> <buffer> <localleader>/ <ESC>:VimSetcomment<CR>	
-
     autocmd FileType vim noremap <silent> <buffer> <F6> :<c-u>w<CR>:source vimscript.vim<CR>	
 augroup END
 " }}}
@@ -163,79 +157,9 @@ Plug 'nvie/vim-flake8'
 augroup python
     autocmd!
     autocmd BufNewFile,BufRead *.py setlocal textwidth=79 cc=80 fileformat=unix
-    command! -nargs=0 PythonSetcomment call s:SET_COMMENT("python")
-    command! -nargs=0 PythonSetcommentV call s:SET_COMMENTV("python")
-    autocmd FileType python vnoremap <silent> <buffer> <localleader>/ <ESC>:PythonSetcommentV<CR>
-    autocmd FileType python nnoremap <silent> <buffer> <localleader>/ <ESC>:PythonSetcomment<CR>	
     autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
     " autocmd FileType python noremap <buffer> <F2> :call Flake8()<CR>
 augroup END
-" }}}
-
-
-" ------------------- Annotation -------------------- {{{
-"  https://github.com/iqiy/11Env/blob/master/_vimrc
-" 和pycharm一样，<localleader>/ 注释与取消，多行时首先<C-v>选中多行
-"非视图模式下所调用的函数
-function! s:SET_COMMENT(type)
-    let lindex=line(".")
-    let str=getline(lindex)
-    "查看当前是否为注释行
-    let CommentMsg=s:IsComment(str, a:type)
-    call s:SET_COMMENTV_LINE(lindex,CommentMsg[1],CommentMsg[0], a:type)
-endfunction
-
-"视图模式下所调用的函数
-function! s:SET_COMMENTV(type)
-    let lbeginindex=line("'<") "得到视图中的第一行的行数
-    let lendindex=line("'>") "得到视图中的最后一行的行数
-    "为各行设置
-    let i=lbeginindex
-    while i<=lendindex
-        let str=getline(i)
-        "查看当前是否为注释行
-        let CommentMsg=s:IsComment(str, a:type)
-        call s:SET_COMMENTV_LINE(i,CommentMsg[1],CommentMsg[0], a:type)
-        let i=i+1
-    endwhile
-endfunction
-
-"设置注释, index:在第几行, pos:在第几列, comment_flag: 0:添加注释符 1:删除注释符
-function! s:SET_COMMENTV_LINE(index, pos, comment_flag, type)
-    let poscur = [0,0,0,0]
-    let poscur[1]=a:index
-    let poscur[2]=a:pos+1
-    call setpos(".",poscur) "设置光标的位置
-
-    if a:type == "python"
-        if a:comment_flag==0
-            execute "normal! i# "
-        else
-            execute "normal! xx"
-        endif
-    elseif a:type == "vim"
-        if a:comment_flag==0
-            execute "normal! i\" "
-        else
-            execute "normal! xx"
-        endif
-    endif
-
-endfunction
-
-" 查看当前是否为注释行并返回相关信息, str: 一行代码
-function! s:IsComment(str, type)
-    let ret=[0, 0] "第一项为是否为注释行（0,1）,第二项为要处理的列，
-    if a:type == "python"
-        let l:sign = "# "
-    elseif a:type == "vim"
-        let l:sign = "\" "
-    endif
-    let i=0
-    let strlen=len(a:str)
-    if (a:str[0]==l:sign[0] && a:str[1]==l:sign[1]) | let ret[0] = 1 | endif
-    return ret
-endfunction
 " }}}
 
 
@@ -286,13 +210,6 @@ let g:AutoPairsShortcutFastWrap = '<C-e>'
 "  }}}
 
 
-" ----------------------------- vista.vim --------------------------- {{{
-Plug 'liuchengxu/vista.vim'
-autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
-
-
-"  }}}
-
 " --------------------------- lightline ------------------------- {{{
 " git wrapper
 Plug 'tpope/vim-fugitive'
@@ -304,38 +221,23 @@ Plug 'ryanoasis/vim-devicons'
 let g:lightline = {
       \  'colorscheme': 'dracula',
       \  'active': {
-      \      'left': [['Mode', 'paste'], ['GitInfo'], [ 'Filename', 'Modified' ], [ 'VistaNearestFunction' ]],
-      \      'right': [
-      \          [ 'CocStatus' ],
-      \          [ 'LineInfo' ],
-      \          [ 'FileEncoding', 'FileFormat' ] ],
+      \      'left': [['Mode', 'paste'], ['GitInfo'], [ 'Filename', 'Modified' ]],
+      \      'right': [[ 'CocStatus' ], [ 'LineInfo' ], [ 'FileEncoding', 'FileFormat' ]],
       \  },
       \   'inactive': {
       \      'left': [[ 'InFilename' ]],
-      \      'right': [
-      \          [ 'LineInfo' ],
-      \          [ 'FileEncoding', 'FileFormat'] ],
+      \      'right': [[ 'LineInfo' ], [ 'FileEncoding', 'FileFormat']],
       \  },
       \  'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
       \  'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
       \  'mode_map': {
       \      'n': 'NORMAL', 'i': 'INSERT', 'R': 'REPLACE', 'v': 'VISUAL', 'V': 'V-LINE', "\<C-v>": 'V-BLOCK',
       \      'c': 'COMMAND', 's': 'SELECT', 'S': 'S-LINE', "\<C-s>": 'S-BLOCK', 't': 'TERMINAL'
-      \   },
-      \  'component': {
-      \      'percent': '%2p%%', 'percentwin': '%P'
       \  },
-      \  'component_function': {
-      \      'Mode':                   'GetMode',
-      \      'GitInfo':                'GetGitInfo',
-      \      'Filename':               'GetFilenameIcon',
-      \      'LineInfo':               'GetLineInfo',
-      \      'InFilename':             'GetInFilenameIcon',
-      \      'FileFormat':             'GetFileFormat',
-      \      'FileEncoding':           'GetFileEncoding',
-      \      'Modified':               'GetModified',
-      \      'VistaNearestFunction':   'NearestMethodOrFunction', 
-      \      'CocStatus':              'coc#status'
+      \  'component': { 'percent': '%2p%%', 'percentwin': '%P' },
+      \  'component_function': { 'Mode': 'GetMode', 'GitInfo': 'GetGitInfo', 'Filename': 'GetFilenameIcon',
+      \      'LineInfo': 'GetLineInfo', 'InFilename': 'GetInFilenameIcon', 'FileFormat': 'GetFileFormat',
+      \      'FileEncoding': 'GetFileEncoding', 'Modified': 'GetModified', 'CocStatus': 'coc#status'
       \  },
       \ }
 " Mode {{{
@@ -434,92 +336,67 @@ function! GetFileEncoding()
 endfunction
 " }}}
 
-" show the nearest method/function in your statusline
-function! NearestMethodOrFunction() abort
-    let lens = len(get(b:, 'vista_nearest_method_or_function', ''))
-    if lens == 0
-        return ''
-    else
-        return "\uF794#" . get(b:, 'vista_nearest_method_or_function', '')
-    endif
-endfunction
-" }}}
 "}}}
 
-" -------------------------------------- fzf -------------------------- {{{
-if has('mac')
-    set rtp+=/usr/local/opt/fzf
-elseif has('unix')
-    set rtp+=~/.fzf
-endif
-Plug 'junegunn/fzf.vim'
-"<Leader>f在当前目录搜索文件
-nnoremap <silent> <Leader>f :Files<CR>
-"<Leader>b切换Buffer中的文件
-nnoremap <silent> <Leader>b :Buffers<CR>
-"<Leader>p在当前所有加载的Buffer中搜索包含目标词的所有行，:BLines只在当前Buffer中搜索
-nnoremap <silent> <Leader>p :Lines<CR>
-"<Leader>h在Vim打开的历史文件中搜索，相当于是在MRU中搜索，:History：命令历史查找
-nnoremap <Leader>h :History
-"调用Rg进行搜索，包含隐藏文件
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case --hidden '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
-command! -bar -bang -nargs=? -complete=buffer Buffers
-    \ call fzf#vim#buffers(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
+" -------------------------------------- LeaderF -------------------------- {{{
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh'  }
 
-"Jump to tags in the current buffer
-function! s:align_lists(lists)
-  let maxes = {}
-  for list in a:lists
-    let i = 0
-    while i < len(list)
-      let maxes[i] = max([get(maxes, i, 0), len(list[i])])
-      let i += 1
-    endwhile
-  endfor
-  for list in a:lists
-    call map(list, "printf('%-'.maxes[v:key].'s', v:val)")
-  endfor
-  return a:lists
-endfunction
+" don't show the help in normal mode
+let g:Lf_HideHelp = 1
+let g:Lf_UseCache = 0
+let g:Lf_UseVersionControlTool = 0
+let g:Lf_IgnoreCurrentBufferName = 1
+" let g:Lf_PopupColorscheme = 'dracula'
+" let g:Lf_StlColorscheme = 'dracula'
 
-function! s:btags_source()
-  let lines = map(split(system(printf(
-    \ 'ctags -f - --sort=no --excmd=number --language-force=%s %s',
-    \ &filetype, expand('%:S'))), "\n"), 'split(v:val, "\t")')
-  if v:shell_error
-    throw 'failed to extract tags'
-  endif
-  return map(s:align_lists(lines), 'join(v:val, "\t")')
-endfunction
+" popup mode
+let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2" }
+let g:Lf_PreviewResult = { 'File': 0, 'Buffer': 0, 'Mru': 0, 'Tag': 0, 'BufTag': 1, 'Function': 1,
+        \ 'Line': 0, 'Colorscheme': 0, 'Rg': 0, 'Gtags': 0 }
+let g:Lf_PopupPalette = {
+        \  'dark': {
+        \      'Lf_hl_popup_inputText': { 'guifg': '#87ceeb', 'guibg': '#44475A' },
+        \      'Lf_hl_popup_window': { 'guifg': '#F8F8F2', 'guibg': '#282A36' },
+        \      'Lf_hl_popup_blank': { 'guifg': 'NONE', 'guibg': '#44475A' },
+        \      'Lf_hl_cursorline': { 'guifg': 'NONE' },
+        \      'Lf_hl_popup_prompt': { 'guifg': 'NONE' },
+        \      'Lf_hl_popup_total': { 'guifg': '#282A36', 'guibg': '#BD93F9' },
+        \      'Lf_hl_popup_lineInfo': { 'guifg': '#F8F8F2', 'guibg': '#6272A4' },
+        \      'Lf_hl_popup_inputMode': { 'guifg': '#282A36', 'guibg': '#BD93F9' },
+        \      'Lf_hl_popup_category': { 'guifg': '#282A36', 'guibg': '#FF5555' },
+        \      'Lf_hl_popup_fuzzyMode': { 'guifg': '#282A36', 'guibg': '#FFB86C' },
+        \      'Lf_hl_popup_nameOnlyMode': { 'guifg': '#282A36', 'guibg': '#FFB86C' },
+        \      'Lf_hl_popup_fullPathMode': { 'guifg': '#282A36', 'guibg': '#FFB86C' },
+        \      'Lf_hl_popup_regexMode': { 'guifg': '#282A36', 'guibg': '#FFB86C' },
+        \      'Lf_hl_popup_cwd': { 'guifg': 'NONE', 'guibg': '#44475A' },
+        \      }
+        \  }
+ 
+noremap <leader>ff :<C-U><C-R>=printf("Leaderf file %s", "")<CR><CR>
+noremap <leader>p :<C-U><C-R>=printf("Leaderf function %s", "")<CR><CR>
+noremap <leader>b :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+noremap <leader>h :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+noremap <leader>t :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+noremap <leader>l :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
 
-function! s:btags_sink(line)
-  execute split(a:line, "\t")[2]
-endfunction
+noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
+noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+" search visually selected text literally
+xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+noremap go :<C-U>Leaderf! rg --recall<CR>
 
-function! s:btags()
-  try
-    call fzf#run({
-    \ 'source':  s:btags_source(),
-    \ 'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index',
-    \ 'down':    '40%',
-    \ 'sink':    function('s:btags_sink')})
-  catch
-    echohl WarningMsg
-    echom v:exception
-    echohl None
-  endtry
-endfunction
+" should use `Leaderf gtags --update` first
+let g:Lf_GtagsAutoGenerate = 0
+let g:Lf_Gtagslabel = 'native-pygments'
+noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
-command! BTags call s:btags()
 "  }}}
-
 
 " ------------------------------ markdown ---------------------------- {{{
 if has('mac')
@@ -585,6 +462,13 @@ nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
+endfunction
 "  }}}
 
 
