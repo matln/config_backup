@@ -139,26 +139,23 @@ augroup END
 " }}}
 
 " ------------------ python settings ---------------- {{{
-Plug 'vim-scripts/indentpython.vim'
+let python_highlight_all=1
+let g:python3_host_prog = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
 
-"Flagging Unnecessary Whitespace
-"highlight BadWhitespace ctermbg=red guibg=darkred
-"au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+Plug 'vim-scripts/indentpython.vim'
 
 " 按照pep8标准自动格式化
 Plug 'tell-k/vim-autopep8'
 
-let python_highlight_all=1
-" highlight keyword "self", add the following line into the file `$VIMRUNTIME/syntax/python.vim`, need ROOT
-"syn keyword pythonStatement self
+" Semantic highlighting for Python
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+nnoremap <silent> <leader>] :Semshi goto name next<CR>
+nnoremap <silent> <leader>[ :Semshi goto name prev<CR>
 
-"需要先在系统安装flake8, 通过pip
-Plug 'nvie/vim-flake8'
 augroup python
     autocmd!
     autocmd BufNewFile,BufRead *.py setlocal textwidth=79 cc=80 fileformat=unix
     autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
-    " autocmd FileType python noremap <buffer> <F2> :call Flake8()<CR>
 augroup END
 " }}}
 
@@ -222,11 +219,11 @@ let g:lightline = {
       \  'colorscheme': 'dracula',
       \  'active': {
       \      'left': [['Mode', 'paste'], ['GitInfo'], [ 'Filename', 'Modified' ]],
-      \      'right': [[ 'CocStatus' ], [ 'LineInfo' ], [ 'FileEncoding', 'FileFormat' ]],
+      \      'right': [[ 'LineInfo' ], [ 'CocStatus' ]],
       \  },
       \   'inactive': {
       \      'left': [[ 'InFilename' ]],
-      \      'right': [[ 'LineInfo' ], [ 'FileEncoding', 'FileFormat']],
+      \      'right': [[ 'LineInfo' ]],
       \  },
       \  'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
       \  'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
@@ -374,12 +371,12 @@ let g:Lf_PopupPalette = {
         \      }
         \  }
  
-noremap <leader>ff :<C-U><C-R>=printf("Leaderf file %s", "")<CR><CR>
-noremap <leader>p :<C-U><C-R>=printf("Leaderf function %s", "")<CR><CR>
-noremap <leader>b :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
-noremap <leader>h :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
-noremap <leader>t :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
-noremap <leader>l :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+noremap <silent> <leader>ff :<C-U><C-R>=printf("Leaderf file %s", "")<CR><CR>
+noremap <silent> <leader>p :<C-U><C-R>=printf("Leaderf function %s", "")<CR><CR>
+noremap <silent> <leader>b :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+noremap <silent> <leader>h :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+noremap <silent> <leader>t :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+noremap <silent> <leader>l :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
 
 noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
 noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
