@@ -1,4 +1,4 @@
-" Neovim config
+j" Neovim config
 " Firstly, build symbolic link:
 " ln -s ~/.init.vim ~/.config/nvim/init.vim
 
@@ -26,16 +26,16 @@ set laststatus=2
 set fillchars=vert:\ 
 highlight VertSplit ctermfg=NONE cterm=bold
 " Enable folding
-set foldmethod=marker
+set foldmethod=indent
 set foldlevel=99
 
-Plug 'tmhedberg/SimpylFold'
-let g:SimpylFold_docstring_preview=1
+" Plug 'tmhedberg/SimpylFold'
+" let g:SimpylFold_docstring_preview=1
 " }}}
 
-" ---------------------- Mappings ------------------- {{{
+" ------------------------------ Mappings ---------------------------- {{{
 let mapleader = ","
-let maplocalleader = ","
+let maplocalleader = "<Space>"
 "split navigations
 nnoremap <C-J> jzz
 nnoremap <C-K> kzz
@@ -74,7 +74,7 @@ nnoremap d "_d
 nnoremap dd "_dd
 nnoremap D "_D
 vnoremap d "_d
-vnoremap dd "_dd
+" vnoremap dd "_dd
 " 剪贴：通过 visual 模式下的 x，或者前面加<leader>表示原来的剪贴
 " nnoremap <leader>x ""x
 " nnoremap <leader>X ""X
@@ -88,7 +88,7 @@ set clipboard=unnamed
 " }}}
 
 
-" -------------------- Colorscheme ------------------ {{{
+" ----------------------------- Colorscheme -------------------------- {{{
 Plug 'dracula/vim', { 'as': 'dracula' }
 set rtp+=~/.local/share/nvim/plugged/dracula
 colorscheme dracula
@@ -110,7 +110,7 @@ let &t_ZR="\e[23m"
 " }}}
 
 
-" ------------------- bash settings ----------------- {{{
+" ------------------------------ bash settings ------------------------ {{{
 augroup shell
     autocmd!
     autocmd BufNewFile,BufRead *.sh
@@ -118,7 +118,7 @@ augroup shell
 augroup END
 " }}}
 
-" ------------------- perl settings ----------------- {{{
+" ------------------------------ perl settings ------------------------ {{{
 augroup perl
     autocmd!
     autocmd BufNewFile,BufRead *.pl
@@ -131,14 +131,14 @@ augroup perl
 augroup END
 " }}}
 
-" ------------------- vimscript settings ----------------- {{{
+" ----------------------------- vimscript settings -------------------- {{{
 augroup vimscript
     autocmd!
     autocmd FileType vim noremap <silent> <buffer> <F6> :<c-u>w<CR>:source vimscript.vim<CR>	
 augroup END
 " }}}
 
-" ------------------ python settings ---------------- {{{
+" ------------------------------ python settings ---------------------- {{{
 let python_highlight_all=1
 let g:python3_host_prog = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
 
@@ -154,13 +154,13 @@ nnoremap <silent> <leader>[ :Semshi goto name prev<CR>
 
 augroup python
     autocmd!
-    autocmd BufNewFile,BufRead *.py setlocal textwidth=79 cc=80 fileformat=unix
+    autocmd BufNewFile,BufRead *.py setlocal textwidth=99 cc=100 fileformat=unix
     autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 augroup END
 " }}}
 
 
-" -------------------------------- RUN ------------------------- {{{
+" ----------------------------------- RUN ----------------------------- {{{
 
 noremap <F6> :call PRUN()<CR>
 " `time` 是 shell 中的计时器，`%` 是 vimscript 中的，表示正在编辑文件的相对路径 
@@ -180,14 +180,21 @@ endfunction
 "  }}}
 
 
+" --------------------------------- 括号补全 -------------------------- {{{
+Plug 'jiangmiao/auto-pairs'
+let g:AutoPairsShortcutFastWrap = '<C-e>'
+"  }}}
+
+
 " --------------------------------- NERDTree -------------------------- {{{
 Plug 'scrooloose/nerdtree'
 Plug 'weilbith/nerdtree_choosewin-plugin'
 "F4快捷键快速切换打开和关闭目录树窗口
+noremap <silent> <F1> :NERDTreeToggle<CR><C-w>l
 noremap <silent> <F3> :NERDTreeToggle<CR>
 noremap <F2> :NERDTreeFind
 "当剩余的窗口都不是文件编辑窗口时，自动退出vim
-autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | qa! | endif
+autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | q | endif
 "ignore files in NERDTree"
 let NERDTreeIgnore=['\.pyc$', '\~$', '\.lock']
 "打开vim时自动打开NERDTree
@@ -201,13 +208,7 @@ let g:NERDTreeWinSize= 25
 "  }}}
 
 
-" ----------------------------------- 括号补全 -------------------------- {{{
-Plug 'jiangmiao/auto-pairs'
-let g:AutoPairsShortcutFastWrap = '<C-e>'
-"  }}}
-
-
-" --------------------------- lightline ------------------------- {{{
+" --------------------------------- lightline ------------------------- {{{
 " git wrapper
 Plug 'tpope/vim-fugitive'
 Plug 'itchyny/lightline.vim'
@@ -335,7 +336,7 @@ endfunction
 
 "}}}
 
-" -------------------------------------- LeaderF -------------------------- {{{
+" ------------------------------------ LeaderF ---------------------------- {{{
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh'  }
 
 " don't show the help in normal mode
@@ -395,7 +396,7 @@ noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
 "  }}}
 
-" ------------------------------ markdown ---------------------------- {{{
+" ----------------------------------- markdown -------------------------------- {{{
 if has('mac')
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'
@@ -409,7 +410,7 @@ if has('mac')
 endif 
 "  }}}
 
-" ----------------------------- coc.nvim ---------------------------- {{{
+" ------------------------------------ coc.nvim ------------------------------- {{{
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " if hidden is not set, TextEdit might fail.
@@ -467,7 +468,6 @@ function! s:show_documentation()
     endif
 endfunction
 "  }}}
-
 
 
 " List ends here. Plugins become visible to Vim after this call.

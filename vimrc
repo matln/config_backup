@@ -40,7 +40,7 @@ let g:SimpylFold_docstring_preview=1
 
 " ---------------------- Mappings ------------------- {{{
 let mapleader = ","
-let maplocalleader = ","
+let maplocalleader = "<Space>"
 "split navigations
 nnoremap <C-J> jzz
 nnoremap <C-K> kzz
@@ -282,7 +282,7 @@ Plugin 'weilbith/nerdtree_choosewin-plugin'
 noremap <silent> <F3> :NERDTreeToggle<CR>
 noremap <F2> :NERDTreeFind
 "当剩余的窗口都不是文件编辑窗口时，自动退出vim
-autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | qa! | endif
+autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | q | endif
 "ignore files in NERDTree"
 let NERDTreeIgnore=['\.pyc$', '\~$', '\.lock']
 "打开vim时自动打开NERDTree
