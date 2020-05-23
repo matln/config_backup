@@ -1,21 +1,22 @@
-# vimrc_backup
+# config_backup
 
-* `git clone git@github.com:matln/vimrc_backup.git ~/vimrc_backup`
+* `$ git clone git@github.com:matln/config_backup.git ~/config_backup`
 
 * vim
     ```shell
-    cp ~/vimrc_backup/vimrc ~/.vimrc
+    $ mv  ~/.vimrc ~/.vimrc.backup
+    $ cp ~/config_backup/vimrc ~/.vimrc
     ```
 
 * neovim
     ```shell
-    cp ~/vimrc_backup/init.vim ~/.init.vim
-    ln -s ~/.init.vim ~/.config/nvim/init.vim
+    $ cp ~/config_backup/init.vim ~/.init.vim
+    $ ln -s ~/.init.vim ~/.config/nvim/init.vim
     ```
 
 * coc-settings.json
     ```shell
-    cp ~/vimrc_backup/coc-settings.json ~/.config/nvim/coc-settings.json
+    $ cp ~/vimrc_backup/coc-settings.json ~/.config/nvim/coc-settings.json
     ```
 
 * dracula.vim 
