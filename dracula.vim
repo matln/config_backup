@@ -15,19 +15,26 @@ let s:orange   = g:dracula#palette.orange
 let s:purple   = g:dracula#palette.purple
 let s:red      = g:dracula#palette.red
 let s:yellow   = g:dracula#palette.yellow
+let s:bglighter = g:dracula#palette.bglighter
+let s:bglight   = g:dracula#palette.bglight
+let s:bgdark    = g:dracula#palette.bgdark
+let s:bgdarker  = g:dracula#palette.bgdarker
+let s:subtle    = g:dracula#palette.subtle
+let s:pink      = g:dracula#palette.pink
+let s:none      = ['NONE', 'NONE']
 
 if exists('g:lightline')
 " 
   let s:p = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
-  let s:p.normal.left = [ [ s:black, s:purple ], [ s:white, s:darkblue ], [ s:cyan, s:gray ] ]
-  let s:p.normal.right = [ [ s:white, s:darkblue ], [ s:cyan, s:gray ] ]
-  let s:p.inactive.right = [ [ s:black, s:darkblue ], [ s:white, s:black ] ]
-  let s:p.inactive.left =  [ [ s:cyan, s:black ], [ s:white, s:black ] ]
-  let s:p.insert.left = [ [ s:black, s:green ], [ s:cyan, s:gray ] ]
-  let s:p.replace.left = [ [ s:black, s:red ], [ s:cyan, s:gray ] ]
-  let s:p.visual.left = [ [ s:black, s:orange ], [ s:cyan, s:gray ] ]
-  let s:p.normal.middle = [ [ s:white, s:gray ] ]
-  let s:p.inactive.middle = [ [ s:white, s:gray ] ]
+  let s:p.normal.left = [ [ s:black, s:purple ], [ s:cyan, s:bglighter ], [ s:orange, s:bglight ] ]
+  let s:p.normal.right = [ [ s:black, s:purple ], [ s:red, s:bglighter ], [ s:orange, s:bglight ] ]
+  let s:p.inactive.right = [ [ s:cyan, s:black ], [ s:white, s:black ] ]
+  let s:p.inactive.left =  [ [ s:cyan, s:bglighter ], [ s:white, s:black ] ]
+  let s:p.insert.left = [ [ s:black, s:green ], [ s:cyan, s:bglighter ], [ s:orange, s:bglight ] ]
+  let s:p.replace.left = [ [ s:black, s:red ], [ s:cyan, s:bglighter ], [ s:white, s:bglight ] ]
+  let s:p.visual.left = [ [ s:black, s:orange ], [ s:cyan, s:bglighter ], [ s:white, s:bglight ] ]
+  let s:p.normal.middle = [ [ s:white, s:bgdark ] ]
+  let s:p.inactive.middle = [ [ s:white, s:black ] ]
   let s:p.tabline.left = [ [ s:darkblue, s:gray ] ]
   let s:p.tabline.tabsel = [ [ s:cyan, s:black ] ]
   let s:p.tabline.middle = [ [ s:darkblue, s:gray ] ]

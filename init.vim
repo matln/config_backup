@@ -1,4 +1,4 @@
-j" Neovim config
+" Neovim config
 " Firstly, build symbolic link:
 " ln -s ~/.init.vim ~/.config/nvim/init.vim
 
@@ -219,8 +219,8 @@ Plug 'ryanoasis/vim-devicons'
 let g:lightline = {
       \  'colorscheme': 'dracula',
       \  'active': {
-      \      'left': [['Mode', 'paste'], ['GitInfo'], [ 'Filename', 'Modified' ]],
-      \      'right': [[ 'LineInfo' ], [ 'CocStatus' ]],
+      \      'left': [['Mode', 'paste'], ['GitInfo'], [ 'Filename']],
+      \      'right': [[ 'LineInfo' ], [ 'StatusDiagnostic' ], [ 'Coc_Status' ]],
       \  },
       \   'inactive': {
       \      'left': [[ 'InFilename' ]],
@@ -235,9 +235,30 @@ let g:lightline = {
       \  'component': { 'percent': '%2p%%', 'percentwin': '%P' },
       \  'component_function': { 'Mode': 'GetMode', 'GitInfo': 'GetGitInfo', 'Filename': 'GetFilenameIcon',
       \      'LineInfo': 'GetLineInfo', 'InFilename': 'GetInFilenameIcon', 'FileFormat': 'GetFileFormat',
-      \      'FileEncoding': 'GetFileEncoding', 'Modified': 'GetModified', 'CocStatus': 'coc#status'
+      \      'FileEncoding': 'GetFileEncoding', 'Modified': 'GetModified', 'CocStatus': 'coc#status',
+      \      'StatusDiagnostic': 'GetStatusDiagnostic', 'Coc_Status': 'GetCocStatus'
       \  },
       \ }
+" coc-diagnostic {{{
+function! GetStatusDiagnostic() abort
+    let info = get(b:, 'coc_diagnostic_info', {})
+    if empty(info) | return '' | endif
+    let msgs = []
+    if get(info, 'error', 0)
+        call add(msgs, '✘:' . info['error'])
+    endif
+    if get(info, 'warning', 0)
+        call add(msgs, "\uf0e7:" . info['warning'])
+    endif
+    return join(msgs, ' ') 
+endfunction
+" }}}
+" coc-status {{{
+function! GetCocStatus() abort
+    return get(g:, 'coc_status', '')
+endfunction
+" }}}
+
 " Mode {{{
 function! GetMode() abort
     if &buftype == 'terminal'
@@ -254,8 +275,12 @@ function! GetGitInfo() abort
     if s:IsSpecial()
         return ""
     endif
-    let GitBranch = "\uf126 " . fugitive#head()
-    return GitBranch 
+    if fugitive#head() != ""
+        let GitBranch = "\uf126 " . fugitive#head()
+        return GitBranch 
+    else
+        return ""
+    endif
 endfunction
 " }}}
 
@@ -270,32 +295,9 @@ function! s:GetFilename()
     return isReadonly . expand('%:t')
 endfunction
 
-function! GetFilenameIcon() abort
-    if s:IsSpecial()
-        return "" 
-    endif
-    if empty(expand('%:t'))
-        return '[No Name]'
-    endif
-    let filename = s:GetFilename()
-    let icon = strlen(&filetype) ? WebDevIconsGetFileTypeSymbol() . " " : "no ft"
-    return join([icon, filename], "")
-endfunction
-
-function! GetInFilenameIcon() abort
-    if s:IsSpecial()
-        return toupper(&filetype) 
-    elseif empty(expand('%:t'))
-        return '[No Name]'
-    endif
-    let filename = s:GetFilename()
-    let icon = strlen(&filetype) ? " " . WebDevIconsGetFileTypeSymbol() : "no ft"
-    return join([icon, filename], "")
-endfunction
-
 function! s:IsModified() abort
     return s:IsSpecial() ?  ""  :
-    \      &modified     ?  ' ' :
+    \      &modified     ?  ' ' :
     \      &modifiable   ?  ""  : '-'
 endfunction
 
@@ -306,6 +308,30 @@ function! GetModified() abort
     let isModified = s:IsModified()
     return empty(isModified) ? "" : isModified
 endfunction
+
+function! GetFilenameIcon() abort
+    if s:IsSpecial()
+        return "" 
+    endif
+    if empty(expand('%:t'))
+        return '[No Name]'
+    endif
+    let modified = GetModified()
+    let filename = s:GetFilename()
+    let icon = strlen(&filetype) ? WebDevIconsGetFileTypeSymbol() . "" : "no ft"
+    return join([icon, filename, modified], " ")
+endfunction
+
+function! GetInFilenameIcon() abort
+    if s:IsSpecial()
+        return toupper(&filetype) 
+    elseif empty(expand('%:t'))
+        return '[No Name]'
+    endif
+    let filename = s:GetFilename()
+    let icon = strlen(&filetype) ? " " . WebDevIconsGetFileTypeSymbol() : "no ft"
+    return join([icon, filename], " ")
+endfunction
 " }}}
 
 " LineInfo {{{
@@ -313,7 +339,7 @@ function! GetLineInfo() abort
     if s:IsSpecial()
         return ""
     endif
-    return printf("%2d:%-2d ☰  %2d%%", line('.'), col('.'), 100 * line('.') / line('$'))
+    return printf("%2d:%-2d ☰ %2d%%", line('.'), col('.'), 100 * line('.') / line('$'))
 endfunction
 " }}}
 
