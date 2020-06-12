@@ -5,6 +5,8 @@
 " Vim-plug
 call plug#begin('~/.local/share/nvim/plugged')
 
+Plug 'guns/xterm-color-table.vim'
+
 " --------------  Basic Settings -------------------- {{{
 set helplang=cn        " 中文帮助文档
 set encoding=utf-8
@@ -146,11 +148,6 @@ Plug 'vim-scripts/indentpython.vim'
 
 " 按照pep8标准自动格式化
 Plug 'tell-k/vim-autopep8'
-
-" Semantic highlighting for Python
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-nnoremap <silent> <leader>] :Semshi goto name next<CR>
-nnoremap <silent> <leader>[ :Semshi goto name prev<CR>
 
 augroup python
     autocmd!
@@ -495,6 +492,22 @@ function! s:show_documentation()
 endfunction
 "  }}}
 
+" ------------------------------ highlighting -------------------------------- {{{
+" declare this variable before polyglot is loaded
+let g:polyglot_disabled = ['python']
+Plug 'sheerun/vim-polyglot'
+
+" Semantic highlighting for Python
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+nnoremap <silent> <leader>] :Semshi goto name next<CR>
+nnoremap <silent> <leader>[ :Semshi goto name prev<CR>
+
+function MyCustomHighlights()
+    hi semshiErrorSign       ctermfg=231 guifg=#d70000 ctermbg=160 guibg=default
+    sign define semshiError text=✘✘ texthl=semshiErrorSign
+endfunction
+autocmd FileType python call MyCustomHighlights()
+"  }}}
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
