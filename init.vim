@@ -142,7 +142,11 @@ augroup END
 
 " ------------------------------ python settings ---------------------- {{{
 let python_highlight_all=1
-let g:python3_host_prog = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
+if has('mac')
+    let g:python3_host_prog = '/Users/lijianchen/anaconda3/envs/pytorch/bin/python'
+else
+    let g:python3_host_prog = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
+endif
 
 Plug 'vim-scripts/indentpython.vim'
 
