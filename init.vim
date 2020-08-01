@@ -1,6 +1,14 @@
 " Neovim config
 " Firstly, build symbolic link:
 " ln -s ~/.init.vim ~/.config/nvim/init.vim
+"
+" pip install pynvim
+" pip install flake8
+" install vim-plug: https://github.com/junegunn/vim-plug
+" sudo apt-get install shellcheck
+" set python3_host_prog
+" for coc.vim: install nodejs https://github.com/neoclide/coc.nvim
+"   :CocInstall coc-diagnostic
 
 " Vim-plug
 call plug#begin('~/.local/share/nvim/plugged')
@@ -41,8 +49,12 @@ let maplocalleader = "<Space>"
 "split navigations
 nnoremap <C-J> jzz
 nnoremap <C-K> kzz
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+" nnoremap <C-L> <C-W><C-L>
+" nnoremap <C-H> <C-W><C-H>
+" highlight the current word, equivalent to <S-*>
+" nnoremap <C-H> :<C-U><C-R>=printf("/%s", expand("<cword>"))<CR><CR>
+" nnoremap <C-H> <S-*>N
+nnoremap <silent> <C-H> <S-#>N
 inoremap <C-J> <Down>
 inoremap <C-K> <Up>
 inoremap <C-L> <Right>
@@ -205,8 +217,17 @@ let NERDTreeIgnore=['\.pyc$', '\~$', '\.lock']
 "let g:NERDTreeStatusline='%t'
 "状态栏不显示任何信息
 let g:NERDTreeStatusline = '%#NonText#'
-let g:NERDTreeWinSize= 25
+let g:NERDTreeWinSize=35 
 "  }}}
+
+" -------------------------------- Defx -------------------------------- {{{
+" Replace Nerdtree plugin
+" Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+" call defx#custom#option('_', {
+"       \ 'winwidth': 30,
+"       \ })
+
+" }}}
 
 
 " --------------------------------- lightline ------------------------- {{{
@@ -399,27 +420,31 @@ let g:Lf_PopupPalette = {
         \      }
         \  }
  
-noremap <silent> <leader>ff :<C-U><C-R>=printf("Leaderf file %s", "")<CR><CR>
+noremap <silent> <leader>f :<C-U><C-R>=printf("Leaderf file %s", "")<CR><CR>
 noremap <silent> <leader>p :<C-U><C-R>=printf("Leaderf function %s", "")<CR><CR>
 noremap <silent> <leader>b :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
 noremap <silent> <leader>h :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
 noremap <silent> <leader>t :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
 noremap <silent> <leader>l :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
 
-noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
-noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+" noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR><CR>
+nnoremap <silent> <C-B> :LeaderfLineCword<CR>
+" noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))
+" xnoremap <silent> <C-B> :<C-U><C-R>=printf("Leaderf line --input %s", leaderf#Rg#visual())<CR><CR>
+
 " search visually selected text literally
-xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
-noremap go :<C-U>Leaderf! rg --recall<CR>
+" xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+" xnoremap gb :<C-U><C-R>=printf("Leaderf! rg --current-buffer -F -e %s ", leaderf#Rg#visual())<CR><CR>
+" noremap go :<C-U>Leaderf! rg --recall<CR>
 
 " should use `Leaderf gtags --update` first
 let g:Lf_GtagsAutoGenerate = 0
 let g:Lf_Gtagslabel = 'native-pygments'
-noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
-noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
-noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
-noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
-noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+noremap <leader>gr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>gd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>go :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+noremap <leader>gn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+noremap <leader>gp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
 "  }}}
 
@@ -480,7 +505,7 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)

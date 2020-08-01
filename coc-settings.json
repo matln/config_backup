@@ -1,13 +1,22 @@
 {
+  //"python.jediEnabled": false,
+  "python.linting.flake8Args": ["--ignore=E501"],
+  "python.jediMemoryLimit": -1,
   "diagnostic.errorSign": "✘",
   "diagnostic.warningSign": "\uf0e7",
   "diagnostic.infoSign": "",
-  "languageserver": {
-    "bash": {
-      "command": "bash-language-server",
-      "args": ["start"],
-      "filetypes": ["sh"],
-      "ignoredRootPaths": ["~"]
-    }
+  //"languageserver": {
+  //  "bash": {
+  //    "command": "bash-language-server",
+  //    "args": ["start"],
+  //    "filetypes": ["sh"],
+  //    "ignoredRootPaths": ["~"]
+  //  }
+  //}
+  "diagnostic-languageserver.filetypes": {
+    "sh": "shellcheck",
+  },
+  "diagnostic-languageserver.formatFiletypes": {
+    "sh": "shfmt",
   }
 }

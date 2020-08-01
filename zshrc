@@ -126,6 +126,7 @@ alias matlab="/usr/local/MATLAB/R2019b/bin/matlab"
 # .. -r <matlabfile>: matlabfile dont't add suffix ".m"
 alias mrun="/usr/local/MATLAB/R2019b/bin/matlab -nodesktop -nosplash -r"
 alias vim="~/neovim/nvim0.5.0.appimage"
+alias sudovim="sudo ~/neovim/nvim0.5.0.appimage"
 
 alias rm="rm -i"
 
@@ -151,6 +152,5 @@ export PATH="$PATH:$HOME/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-16.04/bin"
 # clangd is a language server that provides IDE-like features to editors.
 export PATH="$PATH:$HOME/clangd_10.0.0/bin"
 
-
-# http_proxy=127.0.0.1:10810
-# https_proxy=127.0.0.1:10810
+# http_proxy=127.0.0.1:10809
+# https_proxy=127.0.0.1:10809
