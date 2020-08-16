@@ -5,7 +5,7 @@
  
 dir=$(date "+%y_%m_%d")
 # dir="/trash/$dir"
-dir="$HOME/trash/$dir"
+dir="/data/$USER/trash/$dir"
 #echo $dir
 if [ ! -d $dir ]; then
   mkdir -p $dir
@@ -20,9 +20,9 @@ function f_remove() {
       name=`basename $i`
       if [ -d "$dir/$name" -o -f "$dir/$name" ]; then
         new_name="$dir/${name}_$(date '+%T')"
-        mv $i $new_name && echo "$i deleted, you can see in $new_name"
+        mv $i $new_name && echo "$i has been moved to $new_name. You can use \`\\rm -r $new_name\` to permanently delete $i."
       else
-        mv $i $dir && echo "$i deleted, you can see in $dir/$i"
+        mv $i $dir && echo "$i has been moved to $dir/$i. You can use \`\\rm -r $dir/$i\` to permanently delete $i."
       fi
     else
       echo "参数错误"
@@ -41,9 +41,9 @@ function remove() {
       elif [ $bool == "y" ]; then
         if [ -d "$dir/$name" -o -f "$dir/$name" ]; then
           new_name="$dir/${name}_$(date '+%T')"
-          mv $j $new_name && echo "$j deleted, you can see in $new_name"
+          mv $j $new_name && echo "$j has been moved to $new_name. You can use \`\\rm -r $new_name\` to permanently delete $j."
         else
-          mv $j $dir && echo "$j deleted, you can see in $dir/$j"
+          mv $j $dir && echo "$j has been moved to $dir/$j. You can use \`\\rm -r $dir/$j\` to permanently delete $j."
         fi
       fi
     else
