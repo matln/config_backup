@@ -126,9 +126,14 @@ alias matlab="/usr/local/MATLAB/R2019b/bin/matlab"
 # .. -r <matlabfile>: matlabfile dont't add suffix ".m"
 alias mrun="/usr/local/MATLAB/R2019b/bin/matlab -nodesktop -nosplash -r"
 alias vim="~/neovim/nvim0.5.0.appimage"
-alias sudovim="sudo ~/neovim/nvim0.5.0.appimage"
 
-alias rm="rm -i"
+# If the last character of the alias value is a space or tab character, then the next command word following the alias is also checked for alias expansion.
+alias sudo='sudo '
+
+# alias rm="rm -i"
+# 使用 /usr/bin/safe_rm.sh
+# alias rm="~/config_backup/safe_rm.sh"
+alias rm="/usr/bin/safe_rm.sh"
 
 cdls() {
   \cd $1
