@@ -59,7 +59,7 @@ while [ "$1" ]; do
       is_f=true
       shift
       ;;
-    -i)
+    -i|-r)
       is_f=false
       shift
       ;;

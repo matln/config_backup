@@ -187,7 +187,7 @@ function! PRUN()
         execute "!time perl %"
     elseif &filetype == 'python'
         execute "!clear"
-        execute "!time python3 %"
+        execute "!time python %"
     endif
 endfunction
 "  }}}
@@ -433,9 +433,9 @@ nnoremap <silent> <C-B> :LeaderfLineCword<CR>
 " xnoremap <silent> <C-B> :<C-U><C-R>=printf("Leaderf line --input %s", leaderf#Rg#visual())<CR><CR>
 
 " search visually selected text literally
-" xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -e %s ", leaderf#Rg#visual())<CR>
 " xnoremap gb :<C-U><C-R>=printf("Leaderf! rg --current-buffer -F -e %s ", leaderf#Rg#visual())<CR><CR>
-" noremap go :<C-U>Leaderf! rg --recall<CR>
+noremap go :<C-U>Leaderf! rg --recall<CR>
 
 " should use `Leaderf gtags --update` first
 let g:Lf_GtagsAutoGenerate = 0
@@ -478,6 +478,10 @@ set updatetime=300
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
 
+" Ctrl-c remapped to Escape to avoid leftover artifacts with CoC menus.
+" https://github.com/neoclide/coc.nvim/issues/1469
+inoremap <C-c> <Esc>
+
 let g:coc_status_error_sign = '✘:'
 let g:coc_status_warning_sign = "\uf0e7:"
 
@@ -505,7 +509,7 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
-nnoremap <silent> gd <Plug>(coc-definition)
+nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -519,6 +523,10 @@ function! s:show_documentation()
         call CocAction('doHover')
     endif
 endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+
 "  }}}
 
 " ------------------------------ highlighting -------------------------------- {{{
