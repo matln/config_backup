@@ -157,7 +157,7 @@ let python_highlight_all=1
 if has('mac')
     let g:python3_host_prog = '/Users/lijianchen/anaconda3/envs/pytorch/bin/python'
 else
-    let g:python3_host_prog = '/home/lijianchen/anaconda3/envs/pytorch/bin/python'
+    let g:python3_host_prog = '/data/lijianchen/anaconda3/envs/pytorch/bin/python'
 endif
 
 Plug 'vim-scripts/indentpython.vim'
@@ -481,6 +481,10 @@ set shortmess+=c
 " Ctrl-c remapped to Escape to avoid leftover artifacts with CoC menus.
 " https://github.com/neoclide/coc.nvim/issues/1469
 inoremap <C-c> <Esc>
+
+" disable for large file
+autocmd FileType text :let b:coc_enabled = 0
+autocmd FileType csv :let b:coc_enabled = 0
 
 let g:coc_status_error_sign = '✘:'
 let g:coc_status_warning_sign = "\uf0e7:"

@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/lijianchen/.oh-my-zsh"
+export ZSH="/data/lijianchen/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -102,15 +102,15 @@ source $ZSH/oh-my-zsh.sh
 # added by Anaconda3 2018.12 installer
 # >>> conda init >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$(CONDA_REPORT_ERRORS=false '/home/lijianchen/anaconda3/bin/conda' shell.bash hook 2> /dev/null)"
+__conda_setup="$(CONDA_REPORT_ERRORS=false '/data/lijianchen/anaconda3/bin/conda' shell.bash hook 2> /dev/null)"
 if [ $? -eq 0 ]; then
     \eval "$__conda_setup"
 else
-    if [ -f "/home/lijianchen/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/lijianchen/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/data/lijianchen/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/data/lijianchen/anaconda3/etc/profile.d/conda.sh"
         CONDA_CHANGEPS1=false conda activate base
     else
-        \export PATH="/home/lijianchen/anaconda3/bin:$PATH"
+        \export PATH="/data/lijianchen/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -120,12 +120,13 @@ conda activate pytorch
 export XKB_DEFAULT_RULES=base
 export QT_XKB_CONFIG_ROOT="/usr/share/X11/xkb:$QT_XKB_DEFAULT_ROOT"
 
-alias pycharm='nohup /home/lijianchen/pycharm/pycharm-2018.3.3/bin/pycharm.sh >/dev/null 2>&1 &'
+alias pycharm='nohup /data/lijianchen/pycharm/pycharm-2018.3.3/bin/pycharm.sh >/dev/null 2>&1 &'
 # export PATH="/usr/local/MATLAB/R2017a/bin:$PATH"
 alias matlab="/usr/local/MATLAB/R2019b/bin/matlab"
 # .. -r <matlabfile>: matlabfile dont't add suffix ".m"
 alias mrun="/usr/local/MATLAB/R2019b/bin/matlab -nodesktop -nosplash -r"
-alias vim="~/neovim/nvim0.5.0.appimage"
+alias vim="/home/lijianchen/neovim/nvim0.5.0.appimage"
+alias tmux="/data/lijianchen/tmux/bin/tmux"
 
 # If the last character of the alias value is a space or tab character, then the next command word following the alias is also checked for alias expansion.
 alias sudo='sudo '
@@ -141,7 +142,7 @@ cdls() {
 }
 alias cd="cdls"
 
-[[ -s /home/lijianchen/.autojump/etc/profile.d/autojump.sh ]] && source /home/lijianchen/.autojump/etc/profile.d/autojump.sh
+[[ -s /data/lijianchen/.autojump/etc/profile.d/autojump.sh ]] && source /data/lijianchen/.autojump/etc/profile.d/autojump.sh
 
 export TERM=xterm-256color
 
