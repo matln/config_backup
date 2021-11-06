@@ -43,6 +43,8 @@ set foldlevel=99
 " let g:SimpylFold_docstring_preview=1
 " }}}
 
+" set iskeyword=@,48-57,_,192-255,10
+
 " ------------------------------ Mappings ---------------------------- {{{
 let mapleader = ","
 let maplocalleader = "<Space>"
@@ -99,6 +101,8 @@ vnoremap d "_d
 " vnoremap <leader>dd ""dd
 " 系统剪切板与匿名寄存器相通
 set clipboard=unnamed
+
+nnoremap <C-G> :echo join([fnamemodify(expand("%"), ":~:."), line(".")], ":")<CR>
 " }}}
 
 
@@ -157,7 +161,7 @@ let python_highlight_all=1
 if has('mac')
     let g:python3_host_prog = '/Users/lijianchen/anaconda3/envs/pytorch/bin/python'
 else
-    let g:python3_host_prog = '/data/lijianchen/anaconda3/envs/pytorch/bin/python'
+    let g:python3_host_prog = '/data/lijianchen/miniconda3/envs/pytorch/bin/python'
 endif
 
 Plug 'vim-scripts/indentpython.vim'
@@ -200,12 +204,11 @@ let g:AutoPairsShortcutFastWrap = '<C-e>'
 
 
 " --------------------------------- NERDTree -------------------------- {{{
-Plug 'scrooloose/nerdtree'
+Plug 'matln/nerdtree'
 Plug 'weilbith/nerdtree_choosewin-plugin'
 "F4快捷键快速切换打开和关闭目录树窗口
 noremap <silent> <F1> :NERDTreeToggle<CR><C-w>l
-noremap <silent> <F3> :NERDTreeToggle<CR>
-noremap <F2> :NERDTreeFind
+noremap <F2> :NERDTreeFind<CR>
 "当剩余的窗口都不是文件编辑窗口时，自动退出vim
 autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | q | endif
 "ignore files in NERDTree"
@@ -217,15 +220,11 @@ let NERDTreeIgnore=['\.pyc$', '\~$', '\.lock']
 "let g:NERDTreeStatusline='%t'
 "状态栏不显示任何信息
 let g:NERDTreeStatusline = '%#NonText#'
-let g:NERDTreeWinSize=35 
+let g:NERDTreeWinSize=40
 "  }}}
 
 " -------------------------------- Defx -------------------------------- {{{
 " Replace Nerdtree plugin
-" Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
-" call defx#custom#option('_', {
-"       \ 'winwidth': 30,
-"       \ })
 
 " }}}
 
@@ -395,6 +394,9 @@ let g:Lf_IgnoreCurrentBufferName = 1
 " let g:Lf_PopupColorscheme = 'dracula'
 " let g:Lf_StlColorscheme = 'dracula'
 
+" leaderf function 可以搜索到类
+let g:Lf_CtagsFuncOpts = {"python": "--python-kinds=fmc --language-force=Python"}
+
 " popup mode
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
@@ -521,15 +523,24 @@ nmap <silent> gr <Plug>(coc-references)
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    else
-        call CocAction('doHover')
-    endif
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
 endfunction
+" function! s:show_documentation()
+"     if (index(['vim','help'], &filetype) >= 0)
+"         execute 'h '.expand('<cword>')
+"     else
+"         call CocAction('doHover')
+"     endif
+" endfunction
 
 " Highlight the symbol and its references when holding the cursor.
-" autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * call CocActionAsync('highlight')
 
 "  }}}
 

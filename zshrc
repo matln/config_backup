@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/data/lijianchen/.oh-my-zsh"
+export ZSH="/home/lijianchen/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -12,7 +12,7 @@ ZSH_THEME="honukai"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -33,7 +33,7 @@ ZSH_THEME="honukai"
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -64,8 +64,8 @@ ZSH_THEME="honukai"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions fzf)
@@ -98,43 +98,15 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# --------------------------------------------------------------------------------------- #
-# added by Anaconda3 2018.12 installer
-# >>> conda init >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$(CONDA_REPORT_ERRORS=false '/data/lijianchen/anaconda3/bin/conda' shell.bash hook 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    \eval "$__conda_setup"
-else
-    if [ -f "/data/lijianchen/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/data/lijianchen/anaconda3/etc/profile.d/conda.sh"
-        CONDA_CHANGEPS1=false conda activate base
-    else
-        \export PATH="/data/lijianchen/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda init <<<
-conda activate pytorch
-
-export XKB_DEFAULT_RULES=base
-export QT_XKB_CONFIG_ROOT="/usr/share/X11/xkb:$QT_XKB_DEFAULT_ROOT"
-
-alias pycharm='nohup /data/lijianchen/pycharm/pycharm-2018.3.3/bin/pycharm.sh >/dev/null 2>&1 &'
-# export PATH="/usr/local/MATLAB/R2017a/bin:$PATH"
-alias matlab="/usr/local/MATLAB/R2019b/bin/matlab"
-# .. -r <matlabfile>: matlabfile dont't add suffix ".m"
-alias mrun="/usr/local/MATLAB/R2019b/bin/matlab -nodesktop -nosplash -r"
-alias vim="/home/lijianchen/neovim/nvim0.5.0.appimage"
-alias tmux="/data/lijianchen/tmux/bin/tmux"
-
-# If the last character of the alias value is a space or tab character, then the next command word following the alias is also checked for alias expansion.
-alias sudo='sudo '
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # alias rm="rm -i"
-# 使用 /usr/bin/safe_rm.sh
-# alias rm="~/config_backup/safe_rm.sh"
-alias rm="/usr/bin/safe_rm.sh"
+# alias rm="/usr/bin/safe_rm.sh"
+alias rm='echo "This is not the command you are looking for. Use: Trash"; false'
+alias trash-put='/data/lijianchen/miniconda3/envs/pytorch/bin/trash-put --trash-dir=/data/lijianchen/.Trash --force-volume=/data'
+alias trash-list='/data/lijianchen/miniconda3/envs/pytorch/bin/trash-list --trash-dir=/data/lijianchen/.Trash'
+alias trash-empty='/data/lijianchen/miniconda3/envs/pytorch/bin/trash-empty --trash-dir=/data/lijianchen/.Trash'
+alias trash-restore='/data/lijianchen/miniconda3/envs/pytorch/bin/trash-restore --trash-dir=/data/lijianchen/.Trash'
 
 cdls() {
   \cd $1
@@ -142,21 +114,46 @@ cdls() {
 }
 alias cd="cdls"
 
-[[ -s /data/lijianchen/.autojump/etc/profile.d/autojump.sh ]] && source /data/lijianchen/.autojump/etc/profile.d/autojump.sh
-
+# true color
 export TERM=xterm-256color
 
+# ctrl + s 与 ctrl + q 在 linux 系统下分别为锁定屏幕和复原。
+# 在系统中禁用这两个按键，然后在 vim 中利用起来
 stty -ixon
 
+# 用 vim 编辑命令行长命令
+# 使用 `<CTRL-x><CTRL-e>` 打开 vim 编辑当前行
 export EDITOR=vim
 export VISUAL=vim
 
-export NODE_OPTIONS=--max_old_space_size=4096
+downloads="/data/lijianchen/Downloads"
+data="/data/lijianchen"
 
-# clang + llvm
-export PATH="$PATH:$HOME/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-16.04/bin"
-# clangd is a language server that provides IDE-like features to editors.
-export PATH="$PATH:$HOME/clangd_10.0.0/bin"
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/data/lijianchen/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/data/lijianchen/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/data/lijianchen/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/data/lijianchen/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+conda activate pytorch
 
-# http_proxy=127.0.0.1:10809
-# https_proxy=127.0.0.1:10809
+[[ -s /home/lijianchen/.autojump/etc/profile.d/autojump.sh ]] && source /home/lijianchen/.autojump/etc/profile.d/autojump.sh
+
+alias vim="~/neovim/nvim.appimage"
+alias sudo='sudo '
+
+# https://www.cnpython.com/qa/115981
+export MKL_THREADING_LAYER=GNU
+
+alias docker="sudo docker"
+
+http_proxy=192.168.11.211:10809
+https_proxy=192.168.11.211:10809
