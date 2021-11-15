@@ -68,7 +68,7 @@ ZSH_THEME="honukai"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions fzf)
+plugins=(zsh-autosuggestions fzf)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -147,7 +147,7 @@ conda activate pytorch
 
 [[ -s /home/lijianchen/.autojump/etc/profile.d/autojump.sh ]] && source /home/lijianchen/.autojump/etc/profile.d/autojump.sh
 
-alias vim="~/neovim/nvim.appimage"
+alias vim="~/neovim/nvim0.5.1.appimage"
 alias sudo='sudo '
 
 # https://www.cnpython.com/qa/115981

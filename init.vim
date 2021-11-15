@@ -17,15 +17,15 @@ Plug 'guns/xterm-color-table.vim'
 
 " --------------  Basic Settings -------------------- {{{
 set helplang=cn        " 中文帮助文档
+set mouse=a
 set encoding=utf-8
 set hlsearch incsearch    " 高亮搜索结果, incsearch则令Vim在你正打着搜索内容时就高亮下一个匹配项
 set ignorecase    " 搜索时大小写不敏感
 set number        " 显示行号
 set backspace=indent,eol,start
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
 set expandtab        "Tab替换成空格
+set tabstop=4
+set shiftwidth=4
 set autoindent       "自动缩进
 set nowrap
 set sidescroll=1
@@ -51,17 +51,17 @@ let maplocalleader = "<Space>"
 "split navigations
 nnoremap <C-J> jzz
 nnoremap <C-K> kzz
+" autopairs 插件默认把 <C-H> 映射成了 <BS>
+let g:AutoPairsMapCh = 0
 " nnoremap <C-L> <C-W><C-L>
 " nnoremap <C-H> <C-W><C-H>
 " highlight the current word, equivalent to <S-*>
 " nnoremap <C-H> :<C-U><C-R>=printf("/%s", expand("<cword>"))<CR><CR>
-" nnoremap <C-H> <S-*>N
-nnoremap <silent> <C-H> <S-#>N
+nnoremap <silent> <C-H> <S-*>N
+" nnoremap <silent> <C-H> <S-#>N
 inoremap <C-J> <Down>
 inoremap <C-K> <Up>
 inoremap <C-L> <Right>
-" autopairs 插件默认把 <C-H> 映射成了 <BS>
-let g:AutoPairsMapCh = 0
 inoremap <C-H> <Left>
 nnoremap <Up> <C-y>
 nnoremap <Down> <C-e>
@@ -74,9 +74,9 @@ vnoremap - $
 nnoremap <C-S> <C-u>
 nnoremap <silent> <C-Q> :nohl<CR>
 " inside nest parentheses
-onoremap in( :<c-u>normal! f(vi(<cr>    
-" inside previous parentheses
-onoremap ip( :<c-u>normal! F)vi(<cr>    
+onoremap ni( :<c-u>normal! f(vi(<cr>    
+" inside previous parentheses, 'previous' would be a better word, but it would shadow the 'paragraph' movement
+onoremap li( :<c-u>normal! F)vi(<cr>    
 " shell command
 nnoremap <leader>s :!
 
@@ -129,10 +129,13 @@ let &t_ZR="\e[23m"
 
 
 " ------------------------------ bash settings ------------------------ {{{
+"  bash 在写 here document 的时候需要制表符，因此设置 noexpandtab
+"  https://blog.csdn.net/zwlove5280/article/details/108794488
+"    \ setlocal noexpandtab tabstop=4 softtabstop=4 shiftwidth=4
 augroup shell
     autocmd!
     autocmd BufNewFile,BufRead *.sh
-    \ setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    \ setlocal noexpandtab tabstop=4 softtabstop=4 shiftwidth=4
 augroup END
 " }}}
 
@@ -205,8 +208,9 @@ let g:AutoPairsShortcutFastWrap = '<C-e>'
 
 " --------------------------------- NERDTree -------------------------- {{{
 Plug 'matln/nerdtree'
-Plug 'weilbith/nerdtree_choosewin-plugin'
-"F4快捷键快速切换打开和关闭目录树窗口
+Plug 'matln/nerdtree_choosewin-plugin'
+Plug 'matln/nerdtree-visual-selection'
+"F1快捷键快速切换打开和关闭目录树窗口
 noremap <silent> <F1> :NERDTreeToggle<CR><C-w>l
 noremap <F2> :NERDTreeFind<CR>
 "当剩余的窗口都不是文件编辑窗口时，自动退出vim
@@ -221,11 +225,63 @@ let NERDTreeIgnore=['\.pyc$', '\~$', '\.lock']
 "状态栏不显示任何信息
 let g:NERDTreeStatusline = '%#NonText#'
 let g:NERDTreeWinSize=40
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+
+" you can add these colors to your .vimrc to help customizing
+let s:brown = "905532"
+let s:aqua =  "3AFFDB"
+let s:blue = "689FB6"
+let s:darkBlue = "44788E"
+let s:purple = "834F79"
+let s:lightPurple = "834F79"
+let s:red = "AE403F"
+let s:beige = "F5C06F"
+let s:yellow = "F09F17"
+let s:orange = "D4843E"
+let s:darkOrange = "F16529"
+let s:pink = "CB6F6F"
+let s:salmon = "EE6E73"
+let s:green = "8FAA54"
+let s:lightGreen = "31B53E"
+let s:white = "FFFFFF"
+let s:rspec_red = 'FE405F'
+let s:git_orange = 'F54D27'
+
+let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExtensionHighlightColor['sh'] = "eca3e0"
+let g:NERDTreeExtensionHighlightColor['py'] = "c1cb61"
+
+let g:NERDTreeExactMatchHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:git_orange " sets the color for .gitignore files
+
+let g:NERDTreePatternMatchHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreePatternMatchHighlightColor['.*_spec\.rb$'] = s:rspec_red " sets the color for files ending with _spec.rb
+
+let g:NERDTreeLimitedSyntax = 1
+
+let g:NERDTreeSyntaxDisableDefaultExtensions = 1
+let g:NERDTreeSyntaxDisableDefaultExactMatches = 1
+let g:NERDTreeSyntaxDisableDefaultPatternMatches = 1
+" enabled extensions with default colors
+" let g:NERDTreeSyntaxEnabledExtensions = ['.cpp', '.html', '.jpg', '.json', '.markdown', '.md', '.png', '.pl', '.py', '.sh', '.vim']
+let g:NERDTreeSyntaxEnabledExactMatches = ['node_modules', 'score'] " enabled exact matches with default colors
+
+
+
 "  }}}
 
 " -------------------------------- Defx -------------------------------- {{{
+"  TODO
 " Replace Nerdtree plugin
-
+" Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
 " }}}
 
 
@@ -465,7 +521,6 @@ endif
 "  }}}
 
 " ------------------------------------ coc.nvim ------------------------------- {{{
-
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " if hidden is not set, TextEdit might fail.
 set hidden
@@ -547,6 +602,8 @@ endfunction
 " ------------------------------ highlighting -------------------------------- {{{
 " declare this variable before polyglot is loaded
 let g:polyglot_disabled = ['python']
+" https://github.com/sheerun/vim-polyglot/issues/648
+let g:polyglot_disabled = ['autoindent']
 Plug 'sheerun/vim-polyglot'
 
 " Semantic highlighting for Python
