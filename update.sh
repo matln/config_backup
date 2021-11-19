@@ -6,3 +6,6 @@ cp ~/.init.vim ~/config_backup/init.vim
 cp ~/.tmux.conf ~/config_backup/tmux.conf
 cp ~/.ipdb ./ipdb
 cp ~/.pdbrc ./pdbrc
+cp ~/.condarc ./condarc
+cp ~/.wgetrc ./wgetrc
+cp ~/.gitconfig ./gitconfig

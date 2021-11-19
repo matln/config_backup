@@ -103,7 +103,7 @@ source $ZSH/oh-my-zsh.sh
 # alias rm="rm -i"
 # alias rm="/usr/bin/safe_rm.sh"
 alias rm='echo "This is not the command you are looking for. Use: trash-put"; false'
-alias trash-put='/data/lijianchen/miniconda3/envs/pytorch/bin/trash-put --trash-dir=/data/lijianchen/.Trash --force-volume=/data'
+alias trash='/data/lijianchen/miniconda3/envs/pytorch/bin/trash-put --trash-dir=/data/lijianchen/.Trash --force-volume=/data'
 alias trash-list='/data/lijianchen/miniconda3/envs/pytorch/bin/trash-list --trash-dir=/data/lijianchen/.Trash'
 alias trash-empty='/data/lijianchen/miniconda3/envs/pytorch/bin/trash-empty --trash-dir=/data/lijianchen/.Trash'
 alias trash-restore='/data/lijianchen/miniconda3/envs/pytorch/bin/trash-restore --trash-dir=/data/lijianchen/.Trash'
