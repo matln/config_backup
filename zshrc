@@ -153,7 +153,7 @@ alias sudo='sudo '
 # https://www.cnpython.com/qa/115981
 export MKL_THREADING_LAYER=GNU
 
-alias docker="sudo docker"
+# alias docker="sudo docker"
 
 http_proxy=192.168.11.211:10809
 https_proxy=192.168.11.211:10809

@@ -102,7 +102,7 @@ vnoremap d "_d
 " 系统剪切板与匿名寄存器相通
 set clipboard=unnamed
 
-nnoremap <C-G> :echo join([fnamemodify(expand("%"), ":~:."), line(".")], ":")<CR>
+nnoremap <C-G> :echo join([expand("%:p"), line(".")], ":")<CR>
 " }}}
 
 
@@ -159,6 +159,7 @@ augroup vimscript
 augroup END
 " }}}
 
+
 " ------------------------------ python settings ---------------------- {{{
 let python_highlight_all=1
 if has('mac')
@@ -169,14 +170,16 @@ endif
 
 Plug 'vim-scripts/indentpython.vim'
 
-" 按照pep8标准自动格式化
-Plug 'tell-k/vim-autopep8'
+" Autopep8 is replaced with black, call in coc-diagnostic
 
-augroup python
-    autocmd!
-    autocmd BufNewFile,BufRead *.py setlocal textwidth=99 cc=100 fileformat=unix
-    autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
-augroup END
+" " 按照pep8标准自动格式化
+" Plug 'tell-k/vim-autopep8'
+" 
+" augroup python
+"     autocmd!
+"     autocmd BufNewFile,BufRead *.py setlocal textwidth=99 cc=100 fileformat=unix
+"     autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
+" augroup END
 " }}}
 
 
@@ -206,77 +209,77 @@ let g:AutoPairsShortcutFastWrap = '<C-e>'
 "  }}}
 
 
-" --------------------------------- NERDTree -------------------------- {{{
-Plug 'matln/nerdtree'
-Plug 'matln/nerdtree_choosewin-plugin'
-Plug 'matln/nerdtree-visual-selection'
-"F1快捷键快速切换打开和关闭目录树窗口
-noremap <silent> <F1> :NERDTreeToggle<CR><C-w>l
-noremap <F2> :NERDTreeFind<CR>
-"当剩余的窗口都不是文件编辑窗口时，自动退出vim
-autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | q | endif
-"ignore files in NERDTree"
-let NERDTreeIgnore=['\.pyc$', '\~$', '\.lock']
-"打开vim时自动打开NERDTree
-"autocmd vimenter *.py,*.sh,*.pl NERDTree|wincmd p
-"窗口是否显示行号
-"let g:NERDTreeShowLineNumbers=1
-"let g:NERDTreeStatusline='%t'
-"状态栏不显示任何信息
-let g:NERDTreeStatusline = '%#NonText#'
-let g:NERDTreeWinSize=40
-
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-let g:NERDTreeFileExtensionHighlightFullName = 1
-let g:NERDTreeExactMatchHighlightFullName = 1
-let g:NERDTreePatternMatchHighlightFullName = 1
-
-" you can add these colors to your .vimrc to help customizing
-let s:brown = "905532"
-let s:aqua =  "3AFFDB"
-let s:blue = "689FB6"
-let s:darkBlue = "44788E"
-let s:purple = "834F79"
-let s:lightPurple = "834F79"
-let s:red = "AE403F"
-let s:beige = "F5C06F"
-let s:yellow = "F09F17"
-let s:orange = "D4843E"
-let s:darkOrange = "F16529"
-let s:pink = "CB6F6F"
-let s:salmon = "EE6E73"
-let s:green = "8FAA54"
-let s:lightGreen = "31B53E"
-let s:white = "FFFFFF"
-let s:rspec_red = 'FE405F'
-let s:git_orange = 'F54D27'
-
-let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
-let g:NERDTreeExtensionHighlightColor['sh'] = "eca3e0"
-let g:NERDTreeExtensionHighlightColor['py'] = "c1cb61"
-
-let g:NERDTreeExactMatchHighlightColor = {} " this line is needed to avoid error
-let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:git_orange " sets the color for .gitignore files
-
-let g:NERDTreePatternMatchHighlightColor = {} " this line is needed to avoid error
-let g:NERDTreePatternMatchHighlightColor['.*_spec\.rb$'] = s:rspec_red " sets the color for files ending with _spec.rb
-
-let g:NERDTreeLimitedSyntax = 1
-
-let g:NERDTreeSyntaxDisableDefaultExtensions = 1
-let g:NERDTreeSyntaxDisableDefaultExactMatches = 1
-let g:NERDTreeSyntaxDisableDefaultPatternMatches = 1
-" enabled extensions with default colors
-" let g:NERDTreeSyntaxEnabledExtensions = ['.cpp', '.html', '.jpg', '.json', '.markdown', '.md', '.png', '.pl', '.py', '.sh', '.vim']
-let g:NERDTreeSyntaxEnabledExactMatches = ['node_modules', 'score'] " enabled exact matches with default colors
-
-
-
-"  }}}
+" " --------------------------------- NERDTree -------------------------- {{{
+" Plug 'matln/nerdtree'
+" Plug 'matln/nerdtree_choosewin-plugin'
+" Plug 'matln/nerdtree-visual-selection'
+" "F1快捷键快速切换打开和关闭目录树窗口
+" noremap <silent> <F1> :NERDTreeToggle<CR><C-w>l
+" noremap <F2> :NERDTreeFind<CR>
+" "当剩余的窗口都不是文件编辑窗口时，自动退出vim
+" autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | q | endif
+" "ignore files in NERDTree"
+" let NERDTreeIgnore=['\.pyc$', '\~$', '\.lock']
+" "打开vim时自动打开NERDTree
+" "autocmd vimenter *.py,*.sh,*.pl NERDTree|wincmd p
+" "窗口是否显示行号
+" "let g:NERDTreeShowLineNumbers=1
+" "let g:NERDTreeStatusline='%t'
+" "状态栏不显示任何信息
+" let g:NERDTreeStatusline = '%#NonText#'
+" let g:NERDTreeWinSize=40
+" 
+" " If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+" autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+"     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+" 
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" let g:NERDTreeFileExtensionHighlightFullName = 1
+" let g:NERDTreeExactMatchHighlightFullName = 1
+" let g:NERDTreePatternMatchHighlightFullName = 1
+" 
+" " you can add these colors to your .vimrc to help customizing
+" let s:brown = "905532"
+" let s:aqua =  "3AFFDB"
+" let s:blue = "689FB6"
+" let s:darkBlue = "44788E"
+" let s:purple = "834F79"
+" let s:lightPurple = "834F79"
+" let s:red = "AE403F"
+" let s:beige = "F5C06F"
+" let s:yellow = "F09F17"
+" let s:orange = "D4843E"
+" let s:darkOrange = "F16529"
+" let s:pink = "CB6F6F"
+" let s:salmon = "EE6E73"
+" let s:green = "8FAA54"
+" let s:lightGreen = "31B53E"
+" let s:white = "FFFFFF"
+" let s:rspec_red = 'FE405F'
+" let s:git_orange = 'F54D27'
+" 
+" let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+" let g:NERDTreeExtensionHighlightColor['sh'] = "eca3e0"
+" let g:NERDTreeExtensionHighlightColor['py'] = "c1cb61"
+" 
+" let g:NERDTreeExactMatchHighlightColor = {} " this line is needed to avoid error
+" let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:git_orange " sets the color for .gitignore files
+" 
+" let g:NERDTreePatternMatchHighlightColor = {} " this line is needed to avoid error
+" let g:NERDTreePatternMatchHighlightColor['.*_spec\.rb$'] = s:rspec_red " sets the color for files ending with _spec.rb
+" 
+" let g:NERDTreeLimitedSyntax = 1
+" 
+" let g:NERDTreeSyntaxDisableDefaultExtensions = 1
+" let g:NERDTreeSyntaxDisableDefaultExactMatches = 1
+" let g:NERDTreeSyntaxDisableDefaultPatternMatches = 1
+" " enabled extensions with default colors
+" " let g:NERDTreeSyntaxEnabledExtensions = ['.cpp', '.html', '.jpg', '.json', '.markdown', '.md', '.png', '.pl', '.py', '.sh', '.vim']
+" let g:NERDTreeSyntaxEnabledExactMatches = ['node_modules', 'score'] " enabled exact matches with default colors
+" 
+" 
+" 
+" "  }}}
 
 " -------------------------------- Defx -------------------------------- {{{
 "  TODO
@@ -301,7 +304,7 @@ let g:lightline = {
       \  },
       \   'inactive': {
       \      'left': [[ 'InFilename' ]],
-      \      'right': [[ 'LineInfo' ]],
+      \      'right': [[ ]],
       \  },
       \  'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
       \  'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
@@ -586,24 +589,72 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
-" function! s:show_documentation()
-"     if (index(['vim','help'], &filetype) >= 0)
-"         execute 'h '.expand('<cword>')
-"     else
-"         call CocAction('doHover')
-"     endif
-" endfunction
 
 " Highlight the symbol and its references when holding the cursor.
 " autocmd CursorHold * call CocActionAsync('highlight')
 
+" Formatting selected code.
+xmap <silent> gf <Plug>(coc-format-selected)
+nmap <silent> gf <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocActionAsync('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+"  }}}
+
+
+" --------------------------- ---- coc-explorer ------------------------------ {{{
+nnoremap <silent> <F1> :CocCommand explorer<CR>
+nnoremap <silent> <F2> <Cmd>call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['relative', 0, 'file']])<CR>
+
+" Auto-open explorer when there's no file to show.
+function! AuCocExplorerAutoOpen()
+    let l:use_floating = 0
+
+    " Auto-open explorer when there's no file to show.
+    if @% == '' || @% == '.'
+        if l:use_floating
+            exe ':CocCommand explorer --position floating'
+        else
+            autocmd User CocExplorerOpenPost ++once exe ':only'
+            exe ':CocCommand explorer'
+        endif
+    endif
+endfunction
+autocmd User CocNvimInit call AuCocExplorerAutoOpen()
+
+" If only one buffer named 'coc-explorer' is shown, then exit
+" This will only work when the current editing file has no error diagnostics
+" autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
+"当剩余的窗口都不是文件编辑窗口时，自动退出vim
+autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | q | endif
+
+" Statusline
+" augroup CocExplorerCustom
+"   autocmd!
+"   autocmd User CocExplorerOpenPost setl statusline=%#NonText#
+" augroup END
 "  }}}
 
 " ------------------------------ highlighting -------------------------------- {{{
 " declare this variable before polyglot is loaded
-let g:polyglot_disabled = ['python']
+" let g:polyglot_disabled = ['python']
 " https://github.com/sheerun/vim-polyglot/issues/648
-let g:polyglot_disabled = ['autoindent']
+let g:polyglot_disabled = ['python', 'autoindent']
 Plug 'sheerun/vim-polyglot'
 
 " Semantic highlighting for Python
@@ -617,6 +668,22 @@ function MyCustomHighlights()
 endfunction
 autocmd FileType python call MyCustomHighlights()
 "  }}}
+
+
+" -------------------------- vim-tmux-navigator ------------------------------ {{{
+Plug 'christoomey/vim-tmux-navigator'
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <M-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
+nnoremap <silent> <M-p> :TmuxNavigatePrevious<cr>
+
+" Write the current buffer before navigating from Vim to tmux pane
+let g:tmux_navigator_save_on_switch = 1
+"  }}}
+
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
