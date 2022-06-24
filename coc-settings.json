@@ -1,6 +1,7 @@
 {
   //"python.jediEnabled": false,
   //"python.linting.flake8Args": ["--ignore=E501"], //"python.jediMemoryLimit": -1, "diagnostic.errorSign": "✘",
+  "diagnostic.errorSign": "✘",
   "diagnostic.warningSign": "\uf0e7",
   "diagnostic.infoSign": "",
   //"languageserver": {
@@ -68,6 +69,13 @@
   //"python.formatting.provider": "black"
   //"explorer.root.strategies": ["cwd"],
   "explorer.trash.command": "trash-put --trash-dir=/data/lijianchen/.Trash --force-volume=/data %l",
+  "explorer.icon.enableNerdfont": true,
+  //"explorer.icon.source": "vim-devicons",
+  //"explorer.git.showIgnored": false,
+  "explorer.git.icon.status.ignored": " ",
+  "explorer.file.hiddenRules": {
+    "filenames": ["__pycache__"]
+  },
   "explorer.keyMappings.global": {
       "m": "actionMenu",
       "E": "open:split",
