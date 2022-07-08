@@ -135,7 +135,7 @@ let &t_ZR="\e[23m"
 augroup shell
     autocmd!
     autocmd BufNewFile,BufRead *.sh
-    \ setlocal noexpandtab tabstop=4 softtabstop=4 shiftwidth=4
+    \ setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
 augroup END
 " }}}
 
@@ -252,9 +252,9 @@ endfunction
 " Mode {{{
 function! GetMode() abort
     if &buftype == 'terminal'
-        return toupper(&buftype)
+        return tolower(&buftype)
     elseif s:IsSpecial()
-        return toupper(&filetype)
+        return tolower(&filetype)
     endif
     return get(g:lightline.mode_map, mode(), '')
 endfunction
@@ -277,7 +277,7 @@ endfunction
 " Filename {{{
 function! s:IsSpecial() abort
     " qf: markdown toc
-    return &buftype == 'terminal' || &filetype =~ '\v(help|startify|nerdtree|qf)'
+    return &buftype == 'terminal' || &filetype =~ '\v(help|startify|nerdtree|coc-explorer|qf)'
 endfunction
 
 function! s:GetFilename()
@@ -314,7 +314,7 @@ endfunction
 
 function! GetInFilenameIcon() abort
     if s:IsSpecial()
-        return toupper(&filetype) 
+        return tolower(&filetype) 
     elseif empty(expand('%:t'))
         return '[No Name]'
     endif
@@ -558,7 +558,16 @@ autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(win
 "   autocmd!
 "   autocmd User CocExplorerOpenPost setl statusline=%#NonText#
 " augroup END
-"  }}}
+
+function! s:enter_explorer()
+  if &filetype == 'coc-explorer'
+    setl statusline=coc-explorer
+  endif
+endfunction
+augroup CocExplorerCustom
+  autocmd!
+  autocmd BufEnter * call <SID>enter_explorer()
+augroup END
 
 " " If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
 " bufname('#'): 上一个buffer的名字, bufname('%'): 当前buffer的名字
@@ -571,6 +580,9 @@ autocmd BufEnter * if bufname('#') =~ '\[coc-explorer\]-\d\+' && bufname('%') !~
 "   autocmd!
 "   autocmd FileType nerdtree,fern,startify,coc-explorer call glyph_palette#apply()
 " augroup end
+
+
+"  }}}
 
 " ------------------------------ highlighting -------------------------------- {{{
 " declare this variable before polyglot is loaded
