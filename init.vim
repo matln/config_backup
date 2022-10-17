@@ -360,6 +360,7 @@ let g:Lf_HideHelp = 1
 let g:Lf_UseCache = 0
 let g:Lf_UseVersionControlTool = 0
 let g:Lf_IgnoreCurrentBufferName = 1
+let g:Lf_FollowLinks = 1
 " let g:Lf_PopupColorscheme = 'dracula'
 " let g:Lf_StlColorscheme = 'dracula'
 
@@ -396,17 +397,19 @@ noremap <silent> <leader>p :<C-U><C-R>=printf("Leaderf function %s", "")<CR><CR>
 noremap <silent> <leader>b :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
 noremap <silent> <leader>h :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
 noremap <silent> <leader>t :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
-noremap <silent> <leader>l :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+" noremap <silent> <leader>l :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+noremap <silent> <leader>l :Leaderf rg --no-ignore subtools/{pytorch,kaldi,score,scripts,conf,linux} local hparams *.sh *.py -e ""<CR>
 
 " noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR><CR>
 nnoremap <silent> <C-B> :LeaderfLineCword<CR>
-" noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))
+noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", "")<CR><CR>
 " xnoremap <silent> <C-B> :<C-U><C-R>=printf("Leaderf line --input %s", leaderf#Rg#visual())<CR><CR>
 
 " search visually selected text literally
 xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -e %s ", leaderf#Rg#visual())<CR>
 " xnoremap gb :<C-U><C-R>=printf("Leaderf! rg --current-buffer -F -e %s ", leaderf#Rg#visual())<CR><CR>
-noremap go :<C-U>Leaderf! rg --recall<CR>
+"
+noremap <silent> <leader>o :Leaderf rg --recall<CR>
 
 " should use `Leaderf gtags --update` first
 let g:Lf_GtagsAutoGenerate = 0

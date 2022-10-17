@@ -67,13 +67,15 @@
     }
   },
   //"python.formatting.provider": "black"
-  "explorer.root.strategies": ["cwd"],
+  "explorer.root.strategies": ["keep"],
   "explorer.trash.command": "trash-put --trash-dir=/data/lijianchen/.Trash --force-volume=/data %l",
   "explorer.icon.enableNerdfont": true,
   //"explorer.icon.source": "vim-devicons",
   //"explorer.git.showIgnored": false,
   "explorer.git.icon.status.ignored": " ",
   "explorer.file.child.template": "[git | 2] [selection | clip | 1] [indent][icon | 1] [diagnosticError & 1][filename omitCenter 1][modified][readonly] [linkIcon & 1][link]",
+  "explorer.file.child.labelingTemplate": "[fullpath][link][diagnosticError][diagnosticWarning][git][size][timeAccessed][timeModified][timeCreated][readonly][modified]",
+  "explorer.git.enable": false,
   "explorer.file.hiddenRules": {
     "filenames": ["__pycache__"]
   },
