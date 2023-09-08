@@ -1,12 +1,12 @@
 show_channel_urls: true
 auto_activate_base: true
-changeps1: False
+changeps1: false
 
 channels:
-   - conda-forge
-   - bioconda
-   - defaults
+  - conda-forge
+  - bioconda
+  - defaults
 
 proxy_servers:
   http: http://192.168.11.211:10809
-  https: https://192.168.11.211:10809
+  https: http://192.168.11.211:10809

@@ -106,6 +106,42 @@ nnoremap <C-G> :echo join([expand("%:p"), line(".")], ":")<CR>
 " }}}
 
 
+" ------- Vim jump between words and stop at end of line ------------- {{{
+" https://vi.stackexchange.com/questions/10602/vim-jump-between-words-and-stop-at-end-of-line
+" " Override w motion
+function! MyWMotion()
+    " Save the initial position
+    let initialLine=line('.')
+
+    " Execute the builtin word motion and get the new position
+    normal! w
+    let newLine=line('.')
+
+    " If the line as changed go back to the previous line
+    if initialLine != newLine
+        normal k$
+    endif
+endfunction
+
+" Override b motion
+function! MyBMotion()
+    " Save the initial position
+    let initialLine=line('.')
+
+    " Execute the builtin word motion and get the new position
+    normal! b
+    let newLine=line('.')
+
+    " If the line as changed go back to the previous line
+    if initialLine != newLine
+        normal j^
+    endif
+endfunction
+
+nnoremap <silent> w :call MyWMotion()<CR>
+nnoremap <silent> b :call MyBMotion()<CR>
+" }}}
+
 " ----------------------------- Colorscheme -------------------------- {{{
 Plug 'dracula/vim', { 'as': 'dracula' }
 set rtp+=~/.local/share/nvim/plugged/dracula
@@ -398,11 +434,12 @@ noremap <silent> <leader>b :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
 noremap <silent> <leader>h :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
 noremap <silent> <leader>t :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
 " noremap <silent> <leader>l :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
-noremap <silent> <leader>l :Leaderf rg --no-ignore subtools/{pytorch,kaldi,score,scripts,conf,linux} local hparams *.sh *.py -e ""<CR>
+" noremap <silent> <leader>l :Leaderf rg --no-ignore subtools/{pytorch,kaldi,score,scripts,conf,linux} local hparams *.sh *.py -e ""<CR>
+noremap <silent> <leader>l :Leaderf rg --no-ignore speakernet tools -e ""<CR>
 
 " noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR><CR>
-nnoremap <silent> <C-B> :LeaderfLineCword<CR>
-noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", "")<CR><CR>
+" nnoremap <silent> <C-B> :LeaderfLineCword<CR>
+" noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", "")<CR><CR>
 " xnoremap <silent> <C-B> :<C-U><C-R>=printf("Leaderf line --input %s", leaderf#Rg#visual())<CR><CR>
 
 " search visually selected text literally
@@ -620,6 +657,12 @@ nnoremap <silent> <M-p> :TmuxNavigatePrevious<cr>
 " Write the current buffer before navigating from Vim to tmux pane
 let g:tmux_navigator_save_on_switch = 1
 "  }}}
+
+" -------------------------- github-copilot ------------------------------ {{{
+Plug 'github/copilot.vim'
+
+"  }}}
+
 
 
 " List ends here. Plugins become visible to Vim after this call.

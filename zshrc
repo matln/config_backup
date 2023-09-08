@@ -147,7 +147,7 @@ conda activate pytorch
 
 [[ -s /home/lijianchen/.autojump/etc/profile.d/autojump.sh ]] && source /home/lijianchen/.autojump/etc/profile.d/autojump.sh
 
-alias vim="~/neovim/nvim0.5.1.appimage"
+alias vim="~/neovim/nvim.appimage"
 alias sudo='sudo '
 
 # https://www.cnpython.com/qa/115981
@@ -163,3 +163,4 @@ PERL5LIB="/home/lijianchen/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PER
 PERL_LOCAL_LIB_ROOT="/home/lijianchen/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/home/lijianchen/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/home/lijianchen/perl5"; export PERL_MM_OPT;
+
