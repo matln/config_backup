@@ -1,98 +1,129 @@
 {
-  //"python.jediEnabled": false,
-  //"python.linting.flake8Args": ["--ignore=E501"], //"python.jediMemoryLimit": -1, "diagnostic.errorSign": "✘",
-  "diagnostic.errorSign": "✘",
-  "diagnostic.warningSign": "\uf0e7",
-  "diagnostic.infoSign": "",
-  //"languageserver": {
-  //  "bash": {
-  //    "command": "bash-language-server",
-  //    "args": ["start"],
-  //    "filetypes": ["sh"],
-  //    "ignoredRootPaths": ["~"]
-  //  }
-  //}
-  "diagnostic-languageserver.filetypes": {
-    "sh": "shellcheck",
-    "python": "flake8"
-  },
-  "diagnostic-languageserver.formatFiletypes": {
-    "sh": "shfmt",
-    "python": ["black", "docformatter"]
-  },
-  "diagnostic-languageserver.formatters": {
-    "black": {
-      "command": "black",
-      "args": ["-q", "-", "-l 100"]
+    //"python.jediEnabled": false,
+    //"python.linting.flake8Args": ["--ignore=E501"], //"python.jediMemoryLimit": -1, "diagnostic.errorSign": "✘",
+    "diagnostic.errorSign": "✘",
+    "diagnostic.warningSign": "\uf0e7",
+    "diagnostic.infoSign": "",
+    //"languageserver": {
+    //  "bash": {
+    //    "command": "bash-language-server",
+    //    "args": ["start"],
+    //    "filetypes": ["sh"],
+    //    "ignoredRootPaths": ["~"]
+    //  }
+    //}
+    "diagnostic-languageserver.filetypes": {
+        "sh": "shellcheck",
+        "python": "flake8"
     },
-    "isort": {
-      "command": "isort",
-      "args": ["-q", "-"]
+    "diagnostic-languageserver.formatFiletypes": {
+        "sh": "shfmt",
+        "python": [
+            "black",
+            "docformatter"
+        ]
     },
-    "docformatter": {
-      "command": "docformatter",
-      "args": ["-"]
-    }
-  },
-   "diagnostic-languageserver.linters": {
-    "flake8": {
-      "sourceName": "flake8",
-      "command": "flake8",
-      "debounce": 200,
-      "rootPatterns": [".git", "pyproject.toml", "setup.py"],
-      "args": [
-        "--ignore=E402,C901,W503,W504,E116,E702,C0103,C0114,C0115,C0116,C0103,C0301,W0613,W0102,R0903,R0902,R0914,R0915,R0205,W0703,W0702,W0603,E501,E203",
-        "--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s",
-        "-"
-      ],
-      "offsetLine": 0,
-      "offsetColumn": 0,
-      "formatLines": 1,
-      "formatPattern": [
-        "(\\d+),(\\d+),([A-Z]),(.*)(\\r|\\n)*$",
-        {
-          "line": 1,
-          "column": 2,
-          "security": 3,
-          "message": 4
+    "diagnostic-languageserver.formatters": {
+        "black": {
+            "command": "black",
+            "args": [
+                "-q",
+                "-",
+                "-l 100"
+            ]
+        },
+        "isort": {
+            "command": "isort",
+            "args": [
+                "-q",
+                "-"
+            ]
+        },
+        "docformatter": {
+            "command": "docformatter",
+            "args": [
+                "-"
+            ]
         }
-      ],
-      "securities": {
-        "W": "info",
-        "E": "warning",
-        "F": "info",
-        "C": "info",
-        "N": "hint"
-      }
+    },
+    "diagnostic-languageserver.linters": {
+        "flake8": {
+            "sourceName": "flake8",
+            "command": "flake8",
+            "debounce": 200,
+            "rootPatterns": [
+                ".git",
+                "pyproject.toml",
+                "setup.py"
+            ],
+            "args": [
+                "--ignore=E402,C901,W503,W504,E116,E702,C0103,C0114,C0115,C0116,C0103,C0301,W0613,W0102,R0903,R0902,R0914,R0915,R0205,W0703,W0702,W0603,E501,E203",
+                "--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s",
+                "-"
+            ],
+            "offsetLine": 0,
+            "offsetColumn": 0,
+            "formatLines": 1,
+            "formatPattern": [
+                "(\\d+),(\\d+),([A-Z]),(.*)(\\r|\\n)*$",
+                {
+                    "line": 1,
+                    "column": 2,
+                    "security": 3,
+                    "message": 4
+                }
+            ],
+            "securities": {
+                "W": "info",
+                "E": "warning",
+                "F": "info",
+                "C": "info",
+                "N": "hint"
+            }
+        }
+    },
+    //"python.formatting.provider": "black"
+    "explorer.root.strategies": [
+        "keep"
+    ],
+    "explorer.trash.command": "trash-put --trash-dir=/data/lijianchen/.Trash --force-volume=/data %l",
+    "explorer.icon.enableNerdfont": true,
+    //"explorer.icon.source": "vim-devicons",
+    //"explorer.git.showIgnored": false,
+    "explorer.git.icon.status.ignored": " ",
+    "explorer.file.child.template": "[git | 2] [selection | clip | 1] [indent][icon | 1] [diagnosticError & 1][filename omitCenter 1][modified][readonly] [linkIcon & 1][link]",
+    "explorer.file.child.labelingTemplate": "[fullpath][link][diagnosticError][diagnosticWarning][git][size][timeAccessed][timeModified][timeCreated][readonly][modified]",
+    "explorer.git.enable": false,
+    "explorer.file.hiddenRules": {
+        "filenames": [
+            "__pycache__"
+        ]
+    },
+    "explorer.keyMappings.global": {
+        "m": "actionMenu",
+        "E": "open:split",
+        "s": "open:vsplit",
+        "<cr>": [
+            "expandable?",
+            [
+                "expanded?",
+                "collapse",
+                "expand"
+            ],
+            "open"
+        ],
+        "l": [
+            "expandable?",
+            [
+                "expanded?",
+                "collapse",
+                "expand"
+            ],
+            "open"
+        ],
+        "C": [
+            "wait",
+            "cd"
+        ],
     }
-  },
-  //"python.formatting.provider": "black"
-  "explorer.root.strategies": ["keep"],
-  "explorer.trash.command": "trash-put --trash-dir=/data/lijianchen/.Trash --force-volume=/data %l",
-  "explorer.icon.enableNerdfont": true,
-  //"explorer.icon.source": "vim-devicons",
-  //"explorer.git.showIgnored": false,
-  "explorer.git.icon.status.ignored": " ",
-  "explorer.file.child.template": "[git | 2] [selection | clip | 1] [indent][icon | 1] [diagnosticError & 1][filename omitCenter 1][modified][readonly] [linkIcon & 1][link]",
-  "explorer.file.child.labelingTemplate": "[fullpath][link][diagnosticError][diagnosticWarning][git][size][timeAccessed][timeModified][timeCreated][readonly][modified]",
-  "explorer.git.enable": false,
-  "explorer.file.hiddenRules": {
-    "filenames": ["__pycache__"]
-  },
-  "explorer.keyMappings.global": {
-      "m": "actionMenu",
-      "E": "open:split",
-      "s": "open:vsplit",
-      "<cr>": [
-        "expandable?",
-        ["expanded?", "collapse", "expand"],
-        "open"
-      ],
-      "l": [
-        "expandable?",
-        ["expanded?", "collapse", "expand"],
-        "open"
-      ],
-      "C": ["wait", "cd"],
-  }
 }

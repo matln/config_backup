@@ -1,6 +1,6 @@
 context = 21
-skip = genericpath, os, posixpath, collections*, importlib*, logging, _bootlocale, codecs,
+skip = genericpath, os, posixpath, collections*, _bootlocale, codecs, logging, importlib*,
  typing, torch*, zipimport, pkg_resources, plistlib, xml*, enum, csv, re, argparse, sre_compile,
  sre_parse, yaml, threading, multiprocessing*, tqdm*, contextlib, _weakrefset, tempfile, random,
  functools, numpy*, mkl, six, gettext, locale, shutil, types, traceback, pandas*, pathlib, uuid,
- abc, encodings, inspect, selectors, socket, hmac
+ abc, encodings, inspect, selectors, socket, hmac, zipfile, extern*

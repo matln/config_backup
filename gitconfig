@@ -1,10 +1,10 @@
 [user]
 	email = lijianchen_hit@outlook.com
 	name = matln
-[http]
-	proxy = http://192.168.11.211:10809
-[https]
-	proxy = https://192.168.11.211:10809
+# [http]
+# 	proxy = http://192.168.11.211:10809
+# [https]
+# 	proxy = https://192.168.11.211:10809
 [oh-my-zsh]
 	hide-status = 1
 [filter "lfs"]

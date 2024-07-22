@@ -59,10 +59,10 @@ let g:AutoPairsMapCh = 0
 " nnoremap <C-H> :<C-U><C-R>=printf("/%s", expand("<cword>"))<CR><CR>
 nnoremap <silent> <C-H> <S-*>N
 " nnoremap <silent> <C-H> <S-#>N
-inoremap <C-J> <Down>
-inoremap <C-K> <Up>
-inoremap <C-L> <Right>
-inoremap <C-H> <Left>
+" inoremap <C-J> <Down>
+" inoremap <C-K> <Up>
+" inoremap <C-L> <Right>
+" inoremap <C-H> <Left>
 nnoremap <Up> <C-y>
 nnoremap <Down> <C-e>
 onoremap - $
@@ -201,7 +201,7 @@ let python_highlight_all=1
 if has('mac')
     let g:python3_host_prog = '/Users/lijianchen/anaconda3/envs/pytorch/bin/python'
 else
-    let g:python3_host_prog = '/data/lijianchen/miniconda3/envs/pytorch/bin/python'
+    let g:python3_host_prog = '/data/lijianchen/miniconda3/envs/pytorch2/bin/python'
 endif
 
 Plug 'vim-scripts/indentpython.vim'
@@ -501,22 +501,39 @@ let g:coc_status_warning_sign = "\uf0e7:"
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Or use `complete_info` if your vim support it, like:
 " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+
+
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -660,6 +677,13 @@ let g:tmux_navigator_save_on_switch = 1
 
 " -------------------------- github-copilot ------------------------------ {{{
 Plug 'github/copilot.vim'
+imap <silent><script><expr> <C-L> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+
+imap <C-H> <Plug>(copilot-dismiss)
+imap <C-J> <Plug>(copilot-next)
+imap <C-K> <Plug>(copilot-previous)
+imap <C-\> <Plug>(copilot-suggest)
 
 "  }}}
 

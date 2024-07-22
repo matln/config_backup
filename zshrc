@@ -143,7 +143,7 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-conda activate pytorch
+conda activate pytorch2
 
 [[ -s /home/lijianchen/.autojump/etc/profile.d/autojump.sh ]] && source /home/lijianchen/.autojump/etc/profile.d/autojump.sh
 
@@ -155,8 +155,8 @@ export MKL_THREADING_LAYER=GNU
 
 # alias docker="sudo docker"
 
-http_proxy=192.168.11.211:10809
-https_proxy=192.168.11.211:10809
+# http_proxy=http://192.168.11.211:10809
+# https_proxy=http://192.168.11.211:10809
 
 PATH="/home/lijianchen/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="/home/lijianchen/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
